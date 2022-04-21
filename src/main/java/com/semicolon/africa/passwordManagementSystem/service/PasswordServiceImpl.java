@@ -3,10 +3,11 @@ package com.semicolon.africa.passwordManagementSystem.service;
 
 import com.semicolon.africa.passwordManagementSystem.data.model.User;
 import com.semicolon.africa.passwordManagementSystem.data.repository.PasswordManagerRepo;
-import com.semicolon.africa.passwordManagementSystem.dtos.request.CreateUserRequest;
-import com.semicolon.africa.passwordManagementSystem.dtos.request.LoginsRequest;
+import com.semicolon.africa.passwordManagementSystem.dtos.request.*;
+import com.semicolon.africa.passwordManagementSystem.dtos.response.AddPasswordResponse;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.CreateUserResponse;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.LoginResponse;
+import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResponse;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,6 @@ public class PasswordServiceImpl implements PasswordService{
 
         passwordManagerRepo.save(newUser);
         log.info(String.valueOf(newUser));
-//        System.out.println(newUser.toString());
 
         CreateUserResponse response = new CreateUserResponse();
         response.setMsg("user created");
@@ -66,4 +66,58 @@ public class PasswordServiceImpl implements PasswordService{
             return null;
         }
     }
+
+    @Override
+    public AddPasswordResponse addPassword(AddPasswordRequest saveRequest) {
+        PasswordToSave passwordToSave = new PasswordToSave();
+        passwordToSave.setPassword(saveRequest.getPassword());
+        passwordToSave.setName(saveRequest.getName());
+        passwordToSave.setUsername(saveRequest.getUsername());
+        passwordToSave.setUrl(saveRequest.getUrl());
+
+        User newUser = passwordManagerRepo.findByEmail(saveRequest.getEmail());
+        newUser.getRegisteredPassword().add(passwordToSave);
+
+        passwordManagerRepo.save(newUser);
+
+        AddPasswordResponse response = new AddPasswordResponse();
+        response.setMessage("password registered");
+
+        return response;
+    }
+
+    @Override
+    public List<PasswordToSave> getListOfSavedPassword(String email) {
+        User newUser = passwordManagerRepo.findByEmail(email);
+
+        return newUser.getRegisteredPassword();
+    }
+
+    @Override
+    public SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest) {
+
+        User newUser = passwordManagerRepo.findByEmail(searchUrlRequest.getEmail());
+        List<PasswordToSave> allPassword = getListOfSavedPassword(searchUrlRequest.getEmail());
+        SearchUrlResponse response = new SearchUrlResponse();
+        for (int password = 0; password < allPassword.size(); password++) {
+//            if ()
+
+        }
+
+
+        return null;
+    }
+
+//    @Override
+//    public SearchUrlResponse searchUrl(String email, SearchUrlRequest searchUrlRequest) {
+//
+//        User newUser = passwordManagerRepo.findByEmail(email);
+//        if(searchUrlRequest != null){
+//            SearchUrlResponse response = new SearchUrlResponse();
+//            response.setPassword(newUser.getPassword());
+//            response.setEmail(newUser.getEmail());
+//            return response;
+//        }
+//        return null;
+//    }
 }

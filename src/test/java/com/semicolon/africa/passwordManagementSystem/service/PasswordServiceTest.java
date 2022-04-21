@@ -2,25 +2,31 @@ package com.semicolon.africa.passwordManagementSystem.service;
 
 import com.semicolon.africa.passwordManagementSystem.dtos.request.CreateUserRequest;
 import com.semicolon.africa.passwordManagementSystem.dtos.request.LoginsRequest;
+import com.semicolon.africa.passwordManagementSystem.dtos.request.AddPasswordRequest;
+import com.semicolon.africa.passwordManagementSystem.dtos.request.SearchUrlRequest;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.CreateUserResponse;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.LoginResponse;
+import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResponse;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DataMongoTest
-//@SpringBootTest
+//@DataMongoTest
+@SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PasswordServiceTest {
 
     @Autowired
     private PasswordService passwordService;
 
-
+    @Order(1)
     @Test
     public void testThatUserCanBeCreated(){
         //given
@@ -33,35 +39,37 @@ class PasswordServiceTest {
         assertThat(passwordService.getAllUsers().size(), is(1));
     }
 
+    @Order(2)
     @Test
     public void testThatCreationCanGetResponse(){
         //given
         CreateUserRequest userRequest = new CreateUserRequest();
         userRequest.setPassword("deoalaD1@$!*Dee");
-        userRequest.setEmail("lota@gmail.com");
+        userRequest.setEmail("loita@gmail.com");
 
         CreateUserResponse response = passwordService.createUser(userRequest);
         assertThat(response.getMsg(),is("user created"));
 
     }
 
+    @Order(3)
     @Test
     public void testThatUserCanLogin(){
         //given
         CreateUserRequest userRequest = new CreateUserRequest();
-        userRequest.setPassword("deoalaD1@$!*Dee");
-        userRequest.setEmail("lota@gmail.com");
-
+        userRequest.setPassword("deoalaD9@$!*Dee");
+        userRequest.setEmail("lotaD@gmail.com");
         passwordService.createUser(userRequest);
 
         LoginsRequest loginsRequest = new LoginsRequest();
-        loginsRequest.setPassword("deoalaD1@$!*Dee");
+        loginsRequest.setPassword("deoalaD9@$!*Dee");
         LoginResponse loginResponse = passwordService.login(loginsRequest);
         assertThat(loginResponse.getMsg(), is("login successful"));
 
     }
 
 
+    @Order(4)
     @Test
     public void testThatUserCanBeCreatedWhenPasswordIsGreaterThan8AndContainsChars(){
         //given
@@ -71,20 +79,106 @@ class PasswordServiceTest {
 
         assertThrows(InvalidPasswordException.class, ()->passwordService.createUser(userRequest));
     }
+    @Order(5)
+    @Test
+    public void testThatPasswordManagerCanAddPassword(){
 
-//    @Test
-//    public void testThatPasswordManagerCanAddPassword(){
-//
-//        //given
-//        CreateUserRequest userRequest = new CreateUserRequest();
-//        userRequest.setPassword("deoalaD1@$!*Dee");
-//        userRequest.setEmail("lota@gmail.com");
-//
-//        passwordService.createUser(userRequest);
-//
-//       SavePasswordRequest saveRequest = new SavePasswordRequest();
-//       saveRequest.
-//    }
+        //given
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPassword("deoalaD10@$!*Dee");
+        userRequest.setEmail("lotaE@gmail.com");
+
+        passwordService.createUser(userRequest);
+
+       AddPasswordRequest saveRequest = new AddPasswordRequest();
+       saveRequest.setUrl("www.facebook.com");
+       saveRequest.setUsername("solomon christian");
+       saveRequest.setPassword("#solomon234");
+       saveRequest.setName("facebook");
+       saveRequest.setEmail("lotaE@gmail.com");
+
+       passwordService.addPassword(saveRequest);
+
+       assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(1));
+    }
+
+    @Order(6)
+    @Test
+    public void testThatUserCanAddAnotherPassword() {
+        //given
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPassword("deoalaD1440@$!*Dee");
+        userRequest.setEmail("lotachukwu@gmail.com");
+
+        passwordService.createUser(userRequest);
+
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.facebook.com");
+        saveRequest.setUsername("femi awolowo");
+        saveRequest.setPassword("#*42winnerSer");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("lotachuwku@gmail.com");
+
+        passwordService.addPassword(saveRequest);
+
+        AddPasswordRequest request = new AddPasswordRequest();
+        saveRequest.setUrl("www.instagram.com");
+        saveRequest.setUsername("femz_man");
+        saveRequest.setPassword("@Femifemo^41");
+        saveRequest.setName("instagram");
+        saveRequest.setEmail("lotachukwu@gmail.com");
+
+        passwordService.addPassword(request);
+
+        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
+    }
+
+
+        @Order(7)
+    @Test
+    public void testThatUserCanSearchFor_A_Url(){
+        //given
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPassword("deoalaD1440@$!*Dee");
+        userRequest.setEmail("lotachukwu@gmail.com");
+
+        passwordService.createUser(userRequest);
+
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.facebook.com");
+        saveRequest.setUsername("femi awolowo");
+        saveRequest.setPassword("#*42winnerSer");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("lotachuwku@gmail.com");
+
+        passwordService.addPassword(saveRequest);
+
+        AddPasswordRequest request = new AddPasswordRequest();
+        saveRequest.setUrl("www.instagram.com");
+        saveRequest.setUsername("femz_man");
+        saveRequest.setPassword("@Femifemo^41");
+        saveRequest.setName("instagram");
+        saveRequest.setEmail("lotachukwu@gmail.com");
+
+        passwordService.addPassword(request);
+
+        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
+
+        SearchUrlRequest searchUrlRequest = new SearchUrlRequest();
+        searchUrlRequest.setUrl("www.instagram.com");
+
+        SearchUrlResponse searchUrlResponse = passwordService.searchUrl(searchUrlRequest);
+        assertThat(searchUrlResponse.getUsername(), is("femz_man"));
+        assertThat(searchUrlResponse.getPassword(), is("@Femifemo^41"));
+
+//        passwordService.searchUrl(userRequest.getEmail(),searchUrlRequest);
+
+//        assertThat(passwordService.getListOfSavedPassword( userRequest.getEmail()).size(), is(" url found"));
+
+
+
+
+    }
 
 
 }

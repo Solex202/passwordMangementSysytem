@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
+//@Component
 public interface PasswordManagerRepo extends MongoRepository<User, String> {
     User findByPassword(String password);
+
+    User findByEmail(String email);
 }

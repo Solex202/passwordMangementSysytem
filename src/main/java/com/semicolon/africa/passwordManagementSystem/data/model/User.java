@@ -14,5 +14,6 @@ public class User {
     private String id;
     private String email;
     private String password;
-    List<PasswordToSave> passwordToSave = new ArrayList<>();
+    List<PasswordToSave> registeredPassword = new ArrayList<>();
+//    private  String registeredPassword;
 }
