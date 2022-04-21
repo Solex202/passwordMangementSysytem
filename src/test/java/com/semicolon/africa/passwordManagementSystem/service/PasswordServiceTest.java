@@ -90,6 +90,11 @@ class PasswordServiceTest {
 
         passwordService.createUser(userRequest);
 
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("deoalaD10@$!*Dee");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
+
        AddPasswordRequest saveRequest = new AddPasswordRequest();
        saveRequest.setUrl("www.facebook.com");
        saveRequest.setUsername("solomon christian");
@@ -112,21 +117,26 @@ class PasswordServiceTest {
 
         passwordService.createUser(userRequest);
 
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("deoalaD1440@$!*Dee");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
+
         AddPasswordRequest saveRequest = new AddPasswordRequest();
         saveRequest.setUrl("www.facebook.com");
         saveRequest.setUsername("femi awolowo");
         saveRequest.setPassword("#*42winnerSer");
         saveRequest.setName("facebook");
-        saveRequest.setEmail("lotachuwku@gmail.com");
+        saveRequest.setEmail("lotachukwu@gmail.com");
 
         passwordService.addPassword(saveRequest);
 
         AddPasswordRequest request = new AddPasswordRequest();
-        saveRequest.setUrl("www.instagram.com");
-        saveRequest.setUsername("femz_man");
-        saveRequest.setPassword("@Femifemo^41");
-        saveRequest.setName("instagram");
-        saveRequest.setEmail("lotachukwu@gmail.com");
+        request.setUrl("www.instagram.com");
+        request.setUsername("femz_man");
+        request.setPassword("@Femifemo^41");
+        request.setName("instagram");
+        request.setEmail("lotachukwu@gmail.com");
 
         passwordService.addPassword(request);
 
@@ -139,26 +149,31 @@ class PasswordServiceTest {
     public void testThatUserCanSearchFor_A_Url(){
         //given
         CreateUserRequest userRequest = new CreateUserRequest();
-        userRequest.setPassword("deoalaD1440@$!*Dee");
+        userRequest.setPassword("dejiDeji@1234");
         userRequest.setEmail("lotachukwu@gmail.com");
 
         passwordService.createUser(userRequest);
+
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("dejiDeji@1234");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
 
         AddPasswordRequest saveRequest = new AddPasswordRequest();
         saveRequest.setUrl("www.facebook.com");
         saveRequest.setUsername("femi awolowo");
         saveRequest.setPassword("#*42winnerSer");
         saveRequest.setName("facebook");
-        saveRequest.setEmail("lotachuwku@gmail.com");
+        saveRequest.setEmail("lotachukwu@gmail.com");
 
         passwordService.addPassword(saveRequest);
 
         AddPasswordRequest request = new AddPasswordRequest();
-        saveRequest.setUrl("www.instagram.com");
-        saveRequest.setUsername("femz_man");
-        saveRequest.setPassword("@Femifemo^41");
-        saveRequest.setName("instagram");
-        saveRequest.setEmail("lotachukwu@gmail.com");
+        request.setUrl("www.instagram.com");
+        request.setUsername("femz_man");
+        request.setPassword("@Femifemo^41");
+        request.setName("instagram");
+        request.setEmail("lotachukwu@gmail.com");
 
         passwordService.addPassword(request);
 
