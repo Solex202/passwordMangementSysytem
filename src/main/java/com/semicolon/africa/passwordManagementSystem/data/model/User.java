@@ -15,5 +15,4 @@ public class User {
     private String email;
     private String password;
     List<PasswordToSave> registeredPassword = new ArrayList<>();
-//    private  String registeredPassword;
 }

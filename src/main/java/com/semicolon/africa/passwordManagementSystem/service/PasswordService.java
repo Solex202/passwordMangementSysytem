@@ -20,9 +20,7 @@ public interface PasswordService {
 
     List<PasswordToSave> getListOfSavedPassword(String email);
 
-//    SearchUrlResponse searchUrl(String email, SearchUrlRequest searchUrlRequest);
-
     SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest);
 
-//    List<User> user = new ArrayList<>();
+    void deleteAll();
 }

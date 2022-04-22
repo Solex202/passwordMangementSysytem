@@ -1,5 +1,6 @@
 package com.semicolon.africa.passwordManagementSystem.service;
 
+import com.semicolon.africa.passwordManagementSystem.data.repository.PasswordManagerRepo;
 import com.semicolon.africa.passwordManagementSystem.dtos.request.CreateUserRequest;
 import com.semicolon.africa.passwordManagementSystem.dtos.request.LoginsRequest;
 import com.semicolon.africa.passwordManagementSystem.dtos.request.AddPasswordRequest;
@@ -7,26 +8,31 @@ import com.semicolon.africa.passwordManagementSystem.dtos.request.SearchUrlReque
 import com.semicolon.africa.passwordManagementSystem.dtos.response.CreateUserResponse;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.LoginResponse;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResponse;
+import com.semicolon.africa.passwordManagementSystem.exception.CannotAddPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-//@DataMongoTest
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PasswordServiceTest {
 
     @Autowired
     private PasswordService passwordService;
 
-    @Order(1)
+    @Autowired
+    private PasswordManagerRepo repo;
+
+//    @BeforeEach
+//    public void setup(){
+//        passwordService = new PasswordServiceImpl(repo);
+//    }
+
+//    @Order(1)
     @Test
     public void testThatUserCanBeCreated(){
         //given
@@ -39,7 +45,7 @@ class PasswordServiceTest {
         assertThat(passwordService.getAllUsers().size(), is(1));
     }
 
-    @Order(2)
+//    @Order(2)
     @Test
     public void testThatCreationCanGetResponse(){
         //given
@@ -52,7 +58,7 @@ class PasswordServiceTest {
 
     }
 
-    @Order(3)
+//    @Order(3)
     @Test
     public void testThatUserCanLogin(){
         //given
@@ -68,8 +74,7 @@ class PasswordServiceTest {
 
     }
 
-
-    @Order(4)
+//    @Order(4)
     @Test
     public void testThatUserCanBeCreatedWhenPasswordIsGreaterThan8AndContainsChars(){
         //given
@@ -79,7 +84,9 @@ class PasswordServiceTest {
 
         assertThrows(InvalidPasswordException.class, ()->passwordService.createUser(userRequest));
     }
-    @Order(5)
+
+
+//    @Order(5)
     @Test
     public void testThatPasswordManagerCanAddPassword(){
 
@@ -107,7 +114,7 @@ class PasswordServiceTest {
        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(1));
     }
 
-    @Order(6)
+//    @Order(6)
     @Test
     public void testThatUserCanAddAnotherPassword() {
         //given
@@ -143,8 +150,7 @@ class PasswordServiceTest {
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
     }
 
-
-        @Order(7)
+//    @Order(7)
     @Test
     public void testThatUserCanSearchFor_A_Url(){
         //given
@@ -181,17 +187,39 @@ class PasswordServiceTest {
 
         SearchUrlRequest searchUrlRequest = new SearchUrlRequest();
         searchUrlRequest.setUrl("www.instagram.com");
+        searchUrlRequest.setEmail("lotachukwu@gmail.com");
 
         SearchUrlResponse searchUrlResponse = passwordService.searchUrl(searchUrlRequest);
         assertThat(searchUrlResponse.getUsername(), is("femz_man"));
         assertThat(searchUrlResponse.getPassword(), is("@Femifemo^41"));
+    }
 
-//        passwordService.searchUrl(userRequest.getEmail(),searchUrlRequest);
+//    @Order(8)
+    @Test
+    public void testThatPasswordManagerCannotAddPasswordWithoutLoggingIn(){
 
-//        assertThat(passwordService.getListOfSavedPassword( userRequest.getEmail()).size(), is(" url found"));
+        //given
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPassword("deoalaD10@$!*Dee");
+        userRequest.setEmail("lotaE@gmail.com");
 
+        passwordService.createUser(userRequest);
 
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.facebook.com");
+        saveRequest.setUsername("solomon christian");
+        saveRequest.setPassword("#solomon234");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("lotaE@gmail.com");
 
+        assertThrows(CannotAddPasswordException.class, () ->passwordService.addPassword(saveRequest));
+    }
+
+    @AfterEach
+    void tearDown(){
+
+        passwordService.deleteAll();
+//        repo.deleteAll();
 
     }
 

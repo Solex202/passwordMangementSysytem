@@ -8,6 +8,5 @@ public class SearchUrlResponse {
 
     private String username;
     private String password;
-//    private String msg;
 
 }
