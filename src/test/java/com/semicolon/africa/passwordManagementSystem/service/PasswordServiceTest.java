@@ -10,6 +10,7 @@ import com.semicolon.africa.passwordManagementSystem.dtos.response.LoginResponse
 import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResponse;
 import com.semicolon.africa.passwordManagementSystem.exception.CannotAddPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
+import com.semicolon.africa.passwordManagementSystem.exception.UrlNotFoundException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PasswordServiceTest {
 
     @Autowired
@@ -32,7 +32,6 @@ class PasswordServiceTest {
 //        passwordService = new PasswordServiceImpl(repo);
 //    }
 
-//    @Order(1)
     @Test
     public void testThatUserCanBeCreated(){
         //given
@@ -45,7 +44,6 @@ class PasswordServiceTest {
         assertThat(passwordService.getAllUsers().size(), is(1));
     }
 
-//    @Order(2)
     @Test
     public void testThatCreationCanGetResponse(){
         //given
@@ -58,7 +56,6 @@ class PasswordServiceTest {
 
     }
 
-//    @Order(3)
     @Test
     public void testThatUserCanLogin(){
         //given
@@ -74,7 +71,6 @@ class PasswordServiceTest {
 
     }
 
-//    @Order(4)
     @Test
     public void testThatUserCanBeCreatedWhenPasswordIsGreaterThan8AndContainsChars(){
         //given
@@ -86,7 +82,6 @@ class PasswordServiceTest {
     }
 
 
-//    @Order(5)
     @Test
     public void testThatPasswordManagerCanAddPassword(){
 
@@ -114,7 +109,6 @@ class PasswordServiceTest {
        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(1));
     }
 
-//    @Order(6)
     @Test
     public void testThatUserCanAddAnotherPassword() {
         //given
@@ -150,14 +144,12 @@ class PasswordServiceTest {
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
     }
 
-//    @Order(7)
     @Test
     public void testThatUserCanSearchFor_A_Url(){
         //given
         CreateUserRequest userRequest = new CreateUserRequest();
         userRequest.setPassword("dejiDeji@1234");
         userRequest.setEmail("lotachukwu@gmail.com");
-
         passwordService.createUser(userRequest);
 
         LoginsRequest loginsRequest = new LoginsRequest();
@@ -171,7 +163,6 @@ class PasswordServiceTest {
         saveRequest.setPassword("#*42winnerSer");
         saveRequest.setName("facebook");
         saveRequest.setEmail("lotachukwu@gmail.com");
-
         passwordService.addPassword(saveRequest);
 
         AddPasswordRequest request = new AddPasswordRequest();
@@ -180,7 +171,6 @@ class PasswordServiceTest {
         request.setPassword("@Femifemo^41");
         request.setName("instagram");
         request.setEmail("lotachukwu@gmail.com");
-
         passwordService.addPassword(request);
 
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
@@ -194,7 +184,6 @@ class PasswordServiceTest {
         assertThat(searchUrlResponse.getPassword(), is("@Femifemo^41"));
     }
 
-//    @Order(8)
     @Test
     public void testThatPasswordManagerCannotAddPasswordWithoutLoggingIn(){
 
@@ -213,6 +202,44 @@ class PasswordServiceTest {
         saveRequest.setEmail("lotaE@gmail.com");
 
         assertThrows(CannotAddPasswordException.class, () ->passwordService.addPassword(saveRequest));
+    }
+
+    @Test
+    public void testThatUrlAndEmailThatDoesntExistThrows_Exception(){
+        //given
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPassword("mmesomaGlo!@2343");
+        userRequest.setEmail("mmesoma@gmail.com");
+        passwordService.createUser(userRequest);
+
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("mmesomaGlo!@2343");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
+
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.twitter.com");
+        saveRequest.setUsername("mmesobby");
+        saveRequest.setPassword("#*42winnerServe");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("mmesoma@gmail.com");
+        passwordService.addPassword(saveRequest);
+
+        AddPasswordRequest request = new AddPasswordRequest();
+        request.setUrl("www.heroku.com");
+        request.setUsername("mmeso");
+        request.setPassword("mmeso@Gee!@12");
+        request.setName("instagram");
+        request.setEmail("mmesoma@gmail.com");
+        passwordService.addPassword(request);
+
+        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
+
+        SearchUrlRequest searchUrlRequest = new SearchUrlRequest();
+        searchUrlRequest.setUrl("www.juno.com");
+        searchUrlRequest.setEmail("mmesoma@gmail.com");
+
+        assertThrows(UrlNotFoundException.class, ()->passwordService.searchUrl(searchUrlRequest));
     }
 
     @AfterEach

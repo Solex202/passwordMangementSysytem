@@ -9,6 +9,7 @@ import com.semicolon.africa.passwordManagementSystem.dtos.response.LoginResponse
 import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResponse;
 import com.semicolon.africa.passwordManagementSystem.exception.CannotAddPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
+import com.semicolon.africa.passwordManagementSystem.exception.UrlNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class PasswordServiceImpl implements PasswordService{
     @Autowired
     private PasswordManagerRepo passwordManagerRepo;
 
-    private boolean isLoggedIn = false;
+//    private boolean isLoggedIn = false;
 
 //    public PasswordServiceImpl(@Autowired PasswordManagerRepo passwordManagerRepo){
 //        this.passwordManagerRepo = passwordManagerRepo;
@@ -63,10 +64,11 @@ public class PasswordServiceImpl implements PasswordService{
     public LoginResponse login(LoginsRequest loginsRequest) {
         User newUser = passwordManagerRepo.findByPassword(loginsRequest.getPassword());
         if(newUser != null){
-            isLoggedIn = true;
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setMsg("login successful");
-        return loginResponse;
+            newUser.setLoginStatus(true);
+            passwordManagerRepo.save(newUser);
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setMsg("login successful");
+            return loginResponse;
         }
         else {
             return null;
@@ -75,7 +77,12 @@ public class PasswordServiceImpl implements PasswordService{
 
     @Override
     public AddPasswordResponse addPassword(AddPasswordRequest saveRequest) {
-        if(userNotLoggedIn()) throw new CannotAddPasswordException("please log in");
+            User newUser = passwordManagerRepo.findByEmail(saveRequest.getEmail());
+        if(!newUser.isLoginStatus()) {
+//            System.out.println(!newUser.isLoginStatus() +"=====>");
+            throw new CannotAddPasswordException("please log in");
+        }
+            else {
 
             PasswordToSave passwordToSave = new PasswordToSave();
             passwordToSave.setPassword(saveRequest.getPassword());
@@ -83,17 +90,13 @@ public class PasswordServiceImpl implements PasswordService{
             passwordToSave.setUsername(saveRequest.getUsername());
             passwordToSave.setUrl(saveRequest.getUrl());
 
-            User newUser = passwordManagerRepo.findByEmail(saveRequest.getEmail());
             newUser.getRegisteredPassword().add(passwordToSave);
 
             passwordManagerRepo.save(newUser);
             AddPasswordResponse response = new AddPasswordResponse();
             response.setMessage("password registered");
-        return response;
-    }
-
-    private boolean userNotLoggedIn() {
-        return !isLoggedIn;
+            return response;
+        }
     }
 
     @Override
@@ -104,13 +107,20 @@ public class PasswordServiceImpl implements PasswordService{
 
     @Override
     public SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest) {
-        List<PasswordToSave> allPassword = getListOfSavedPassword(searchUrlRequest.getEmail());
+       User user= passwordManagerRepo.findByEmail(searchUrlRequest.getEmail());
+
+       List<PasswordToSave> allPassword = user.getRegisteredPassword();
         SearchUrlResponse response = new SearchUrlResponse();
        allPassword.forEach(password->{
+           System.out.println(password.getUrl() +"=====" + searchUrlRequest.getUrl()) ;
            if (password.getUrl().equals(searchUrlRequest.getUrl())){
                response.setPassword(password.getPassword());
                response.setUsername(password.getUsername());
            }
+//           else{
+//
+//           throw new UrlNotFoundException("Not found");
+//           }
        });
        return response;
     }
