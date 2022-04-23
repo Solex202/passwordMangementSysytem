@@ -10,6 +10,7 @@ import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResp
 import com.semicolon.africa.passwordManagementSystem.exception.CannotAddPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.UrlNotFoundException;
+import com.semicolon.africa.passwordManagementSystem.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,8 @@ public class PasswordServiceImpl implements PasswordService{
 
     @Override
     public LoginResponse login(LoginsRequest loginsRequest) {
-        User newUser = passwordManagerRepo.findByPassword(loginsRequest.getPassword());
+//        User newUser = passwordManagerRepo.findByPassword(loginsRequest.getPassword());
+        User newUser = passwordManagerRepo.findByEmail(loginsRequest.getEmail());
         if(newUser != null){
             newUser.setLoginStatus(true);
             passwordManagerRepo.save(newUser);
@@ -71,7 +73,7 @@ public class PasswordServiceImpl implements PasswordService{
             return loginResponse;
         }
         else {
-            return null;
+            throw new UserNotFoundException("please create an account");
         }
     }
 
