@@ -23,4 +23,10 @@ public interface PasswordService {
     SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest);
 
     void deleteAll();
+
+    void delete(int id, String email);
+
+//    void delete(int id, AddPasswordRequest request);
+
+
 }

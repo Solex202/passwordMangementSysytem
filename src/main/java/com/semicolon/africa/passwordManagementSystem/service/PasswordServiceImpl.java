@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.ListIterator;
 
 @Service
 @Slf4j
@@ -81,18 +82,20 @@ public class PasswordServiceImpl implements PasswordService{
     public AddPasswordResponse addPassword(AddPasswordRequest saveRequest) {
             User newUser = passwordManagerRepo.findByEmail(saveRequest.getEmail());
         if(!newUser.isLoginStatus()) {
-//            System.out.println(!newUser.isLoginStatus() +"=====>");
             throw new CannotAddPasswordException("please log in");
         }
             else {
 
             PasswordToSave passwordToSave = new PasswordToSave();
+            passwordToSave.setId(getListOfSavedPassword(saveRequest.getEmail()).size() + 1);
             passwordToSave.setPassword(saveRequest.getPassword());
             passwordToSave.setName(saveRequest.getName());
             passwordToSave.setUsername(saveRequest.getUsername());
             passwordToSave.setUrl(saveRequest.getUrl());
 
             newUser.getRegisteredPassword().add(passwordToSave);
+
+            log.info(passwordToSave.getId() +"========>");
 
             passwordManagerRepo.save(newUser);
             AddPasswordResponse response = new AddPasswordResponse();
@@ -130,6 +133,25 @@ public class PasswordServiceImpl implements PasswordService{
     @Override
     public void deleteAll() {
         passwordManagerRepo.deleteAll();
+    }
+
+    @Override
+    public void delete(int id, String email) {
+        User newUser = passwordManagerRepo.findByEmail(email);
+        List <PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
+
+        ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
+        while (passwords.hasNext()) {
+            if(passwords.next().getId() == id){
+                listOfPassword.remove(passwords.next());
+                break;
+            }
+        }
+        passwordManagerRepo.save(newUser);
+//        if(listOfPassword.contains(listOfPassword.get(id))){
+//            listOfPassword.remove(listOfPassword.get(id));
+//            passwordManagerRepo.save(newUser);
+//        }
     }
 
 

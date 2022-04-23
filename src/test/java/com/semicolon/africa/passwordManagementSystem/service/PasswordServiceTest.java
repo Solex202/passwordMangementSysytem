@@ -39,7 +39,6 @@ class PasswordServiceTest {
         CreateUserRequest userRequest = new CreateUserRequest();
         userRequest.setPassword("deoalaD1@$!*Dee");
         userRequest.setEmail("lota@gmail.com");
-
         passwordService.createUser(userRequest);
 
         assertThat(passwordService.getAllUsers().size(), is(1));
@@ -91,7 +90,6 @@ class PasswordServiceTest {
         CreateUserRequest userRequest = new CreateUserRequest();
         userRequest.setPassword("deoalaD10@$!*Dee");
         userRequest.setEmail("lotaE@gmail.com");
-
         passwordService.createUser(userRequest);
 
         LoginsRequest loginsRequest = new LoginsRequest();
@@ -118,7 +116,6 @@ class PasswordServiceTest {
         CreateUserRequest userRequest = new CreateUserRequest();
         userRequest.setPassword("deoalaD1440@$!*Dee");
         userRequest.setEmail("lotachukwu@gmail.com");
-
         passwordService.createUser(userRequest);
 
         LoginsRequest loginsRequest = new LoginsRequest();
@@ -196,7 +193,6 @@ class PasswordServiceTest {
         CreateUserRequest userRequest = new CreateUserRequest();
         userRequest.setPassword("deoalaD10@$!*Dee");
         userRequest.setEmail("lotaE@gmail.com");
-
         passwordService.createUser(userRequest);
 
         AddPasswordRequest saveRequest = new AddPasswordRequest();
@@ -220,7 +216,49 @@ class PasswordServiceTest {
         loginsRequest.setPassword("tolu@342#LOkPE");
 
         assertThrows(UserNotFoundException.class, ()-> passwordService.login(loginsRequest));
+    }
 
+    @Test
+    public void testThatUserCanDeletePassword() {
+        //given
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPassword("deoalaD1440@$!*Dee");
+        userRequest.setEmail("lotachukwu@gmail.com");
+        passwordService.createUser(userRequest);
+
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("deoalaD1440@$!*Dee");
+        loginsRequest.setEmail("lotachukwu@gmail.com");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
+
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.facebook.com");
+        saveRequest.setUsername("femi awolowo");
+        saveRequest.setPassword("#*42winnerSer");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("lotachukwu@gmail.com");
+
+        passwordService.addPassword(saveRequest);
+
+        AddPasswordRequest request = new AddPasswordRequest();
+        request.setUrl("www.instagram.com");
+        request.setUsername("femz_man");
+        request.setPassword("@Femifemo^41");
+        request.setName("instagram");
+        request.setEmail("lotachukwu@gmail.com");
+
+        passwordService.addPassword(request);
+
+        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
+
+        passwordService.delete(1,request.getEmail());
+
+        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(1));
+    }
+
+    @Test
+    public void testThatUserCanUpdatePassword(){
 
     }
 
