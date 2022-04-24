@@ -147,15 +147,17 @@ public class PasswordServiceImpl implements PasswordService{
         User newUser = passwordManagerRepo.findByEmail(email);
         List<PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
         ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
+        UpdateResponse response = new UpdateResponse();
         while(passwords.hasNext()){
             if(passwords.next().getId() == id){
-                UpdateResponse response = new UpdateResponse();
+                 response.setUsername(updateRequest.getUsername());
+                 response.setMsg("password updated");
 
 //               response = passwords.next().setUsername(updateRequest.getUsername());
             }
         }
 
-        return null;
+        return response;
     }
 
 
