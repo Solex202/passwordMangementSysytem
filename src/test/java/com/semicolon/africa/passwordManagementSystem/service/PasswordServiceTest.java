@@ -293,7 +293,7 @@ class PasswordServiceTest {
         updateRequest.setEmail("lotachukwu@gmail.com");
 //        updateRequest.setName("");
 //        updateRequest.setUrl("");
-        updateRequest.setUsername("femz_man");
+        updateRequest.setUsername("femz_manny");
 
         UpdateResponse response = passwordService.update(updateRequest);
 

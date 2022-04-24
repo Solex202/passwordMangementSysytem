@@ -153,6 +153,14 @@ public class PasswordServiceImpl implements PasswordService{
     @Override
     public UpdateResponse update(UpdatePasswordRequest updateRequest) {
         User newUser = passwordManagerRepo.findByEmail(updateRequest.getEmail());
+        List<PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
+        log.info(listOfPassword.toString());
+//        ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
+//        while (passwords.hasNext()) {
+//           if(passwords.next().getUsername().equals(updateRequest)){
+//               listOfPassword.up
+//           }
+//        }
         return null;
     }
 
