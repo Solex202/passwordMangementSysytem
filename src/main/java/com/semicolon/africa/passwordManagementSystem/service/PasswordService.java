@@ -23,9 +23,6 @@ public interface PasswordService {
 
     void delete(int id, String email);
 
-    UpdateResponse update(UpdatePasswordRequest updateRequest);
 
-//    void delete(int id, AddPasswordRequest request);
-
-
+    UpdateResponse update(int id, UpdatePasswordRequest updateRequest, String email);
 }

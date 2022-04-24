@@ -295,7 +295,7 @@ class PasswordServiceTest {
 //        updateRequest.setUrl("");
         updateRequest.setUsername("femz_manny");
 
-        UpdateResponse response = passwordService.update(updateRequest);
+        UpdateResponse response = passwordService.update(2, updateRequest, request.getEmail());
 
         assertThat(response.getMsg(),is("password updated"));
     }

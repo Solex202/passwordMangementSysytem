@@ -18,16 +18,8 @@ import java.util.ListIterator;
 @Slf4j
 public class PasswordServiceImpl implements PasswordService{
 
-
     @Autowired
     private PasswordManagerRepo passwordManagerRepo;
-
-//    private boolean isLoggedIn = false;
-
-//    public PasswordServiceImpl(@Autowired PasswordManagerRepo passwordManagerRepo){
-//        this.passwordManagerRepo = passwordManagerRepo;
-//
-//    }
 
     @Override
     public CreateUserResponse createUser(CreateUserRequest userRequest) {
@@ -113,7 +105,7 @@ public class PasswordServiceImpl implements PasswordService{
        List<PasswordToSave> allPassword = user.getRegisteredPassword();
         SearchUrlResponse response = new SearchUrlResponse();
        allPassword.forEach(password->{
-           System.out.println(password.getUrl() +"=====" + searchUrlRequest.getUrl()) ;
+           System.out.println(password.getUrl() +"=====>" + searchUrlRequest.getUrl()) ;
            if (password.getUrl().equals(searchUrlRequest.getUrl())){
                response.setPassword(password.getPassword());
                response.setUsername(password.getUsername());
@@ -151,18 +143,36 @@ public class PasswordServiceImpl implements PasswordService{
     }
 
     @Override
-    public UpdateResponse update(UpdatePasswordRequest updateRequest) {
-        User newUser = passwordManagerRepo.findByEmail(updateRequest.getEmail());
+    public UpdateResponse update(int id, UpdatePasswordRequest updateRequest, String email) {
+        User newUser = passwordManagerRepo.findByEmail(email);
         List<PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
-        log.info(listOfPassword.toString());
-//        ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
-//        while (passwords.hasNext()) {
-//           if(passwords.next().getUsername().equals(updateRequest)){
-//               listOfPassword.up
-//           }
-//        }
+        ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
+        while(passwords.hasNext()){
+            if(passwords.next().getId() == id){
+                UpdateResponse response = new UpdateResponse();
+
+//               response = passwords.next().setUsername(updateRequest.getUsername());
+            }
+        }
+
         return null;
     }
+
+
+
+//    @Override
+//    public UpdateResponse update(UpdatePasswordRequest updateRequest) {
+//        User newUser = passwordManagerRepo.findByEmail(updateRequest.getEmail());
+//        List<PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
+//        log.info(listOfPassword.toString());
+////        ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
+////        while (passwords.hasNext()) {
+////           if(passwords.next().getUsername().equals(updateRequest)){
+////               listOfPassword.up
+////           }
+////        }
+//        return null;
+//    }
 
 
 }
