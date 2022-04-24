@@ -2,9 +2,7 @@ package com.semicolon.africa.passwordManagementSystem.service;
 
 import com.semicolon.africa.passwordManagementSystem.data.repository.PasswordManagerRepo;
 import com.semicolon.africa.passwordManagementSystem.dtos.request.*;
-import com.semicolon.africa.passwordManagementSystem.dtos.response.CreateUserResponse;
-import com.semicolon.africa.passwordManagementSystem.dtos.response.LoginResponse;
-import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResponse;
+import com.semicolon.africa.passwordManagementSystem.dtos.response.*;
 import com.semicolon.africa.passwordManagementSystem.exception.CannotAddPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.UrlNotFoundException;
@@ -251,6 +249,8 @@ class PasswordServiceTest {
 
         passwordService.delete(1,request.getEmail());
 
+//        DeletePasswordResponse deleteResponse =  passwordService.delete(1,request.getEmail());
+
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(1));
     }
 
@@ -289,6 +289,15 @@ class PasswordServiceTest {
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
 
         UpdatePasswordRequest updateRequest = new UpdatePasswordRequest();
+//        updateRequest.setPassword("");
+        updateRequest.setEmail("lotachukwu@gmail.com");
+//        updateRequest.setName("");
+//        updateRequest.setUrl("");
+        updateRequest.setUsername("femz_man");
+
+        UpdateResponse response = passwordService.update(updateRequest);
+
+        assertThat(response.getMsg(),is("password updated"));
     }
 
 

@@ -3,10 +3,7 @@ package com.semicolon.africa.passwordManagementSystem.service;
 import com.semicolon.africa.passwordManagementSystem.data.model.User;
 import com.semicolon.africa.passwordManagementSystem.data.repository.PasswordManagerRepo;
 import com.semicolon.africa.passwordManagementSystem.dtos.request.*;
-import com.semicolon.africa.passwordManagementSystem.dtos.response.AddPasswordResponse;
-import com.semicolon.africa.passwordManagementSystem.dtos.response.CreateUserResponse;
-import com.semicolon.africa.passwordManagementSystem.dtos.response.LoginResponse;
-import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResponse;
+import com.semicolon.africa.passwordManagementSystem.dtos.response.*;
 import com.semicolon.africa.passwordManagementSystem.exception.CannotAddPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.UrlNotFoundException;
@@ -64,7 +61,6 @@ public class PasswordServiceImpl implements PasswordService{
 
     @Override
     public LoginResponse login(LoginsRequest loginsRequest) {
-//        User newUser = passwordManagerRepo.findByPassword(loginsRequest.getPassword());
         User newUser = passwordManagerRepo.findByEmail(loginsRequest.getEmail());
         if(newUser != null){
             newUser.setLoginStatus(true);
@@ -152,6 +148,12 @@ public class PasswordServiceImpl implements PasswordService{
 //            listOfPassword.remove(listOfPassword.get(id));
 //            passwordManagerRepo.save(newUser);
 //        }
+    }
+
+    @Override
+    public UpdateResponse update(UpdatePasswordRequest updateRequest) {
+        User newUser = passwordManagerRepo.findByEmail(updateRequest.getEmail());
+        return null;
     }
 
 
