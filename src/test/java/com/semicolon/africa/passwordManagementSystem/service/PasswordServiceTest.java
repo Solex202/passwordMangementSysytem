@@ -1,10 +1,7 @@
 package com.semicolon.africa.passwordManagementSystem.service;
 
 import com.semicolon.africa.passwordManagementSystem.data.repository.PasswordManagerRepo;
-import com.semicolon.africa.passwordManagementSystem.dtos.request.CreateUserRequest;
-import com.semicolon.africa.passwordManagementSystem.dtos.request.LoginsRequest;
-import com.semicolon.africa.passwordManagementSystem.dtos.request.AddPasswordRequest;
-import com.semicolon.africa.passwordManagementSystem.dtos.request.SearchUrlRequest;
+import com.semicolon.africa.passwordManagementSystem.dtos.request.*;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.CreateUserResponse;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.LoginResponse;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.SearchUrlResponse;
@@ -259,10 +256,64 @@ class PasswordServiceTest {
 
     @Test
     public void testThatUserCanUpdatePassword(){
+        //given
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPassword("deoalaD1440@$!*Dee");
+        userRequest.setEmail("lotachukwu@gmail.com");
+        passwordService.createUser(userRequest);
 
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("deoalaD1440@$!*Dee");
+        loginsRequest.setEmail("lotachukwu@gmail.com");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
+
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.facebook.com");
+        saveRequest.setUsername("femi awolowo");
+        saveRequest.setPassword("#*42winnerSer");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("lotachukwu@gmail.com");
+
+        passwordService.addPassword(saveRequest);
+
+        AddPasswordRequest request = new AddPasswordRequest();
+        request.setUrl("www.instagram.com");
+        request.setUsername("femz_man");
+        request.setPassword("@Femifemo^41");
+        request.setName("instagram");
+        request.setEmail("lotachukwu@gmail.com");
+
+        passwordService.addPassword(request);
+
+        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
+
+        UpdatePasswordRequest updateRequest = new UpdatePasswordRequest();
     }
 
-//    @Test
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //    @Test
 //    public void testThatUrlAndEmailThatDoesntExistThrows_Exception(){
 //        //given
 //        CreateUserRequest userRequest = new CreateUserRequest();

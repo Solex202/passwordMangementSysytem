@@ -54,7 +54,7 @@ public class PasswordServiceImpl implements PasswordService{
                + "(?=.*[@#$%^&+=])"
                + "(?=\\S+$).{12,20}$";
 
-       return password.length() >= 12 && password.matches(isValid);
+       return password.matches(isValid);
     }
 
     @Override
