@@ -125,7 +125,6 @@ class PasswordServiceTest {
         saveRequest.setPassword("#*42winnerSer");
         saveRequest.setName("facebook");
         saveRequest.setEmail("lotachukwu@gmail.com");
-
         passwordService.addPassword(saveRequest);
 
         AddPasswordRequest request = new AddPasswordRequest();
@@ -134,7 +133,6 @@ class PasswordServiceTest {
         request.setPassword("@Femifemo^41");
         request.setName("instagram");
         request.setEmail("lotachukwu@gmail.com");
-
         passwordService.addPassword(request);
 
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
@@ -233,7 +231,6 @@ class PasswordServiceTest {
         saveRequest.setPassword("#*42winnerSer");
         saveRequest.setName("facebook");
         saveRequest.setEmail("lotachukwu@gmail.com");
-
         passwordService.addPassword(saveRequest);
 
         AddPasswordRequest request = new AddPasswordRequest();
@@ -242,7 +239,6 @@ class PasswordServiceTest {
         request.setPassword("@Femifemo^41");
         request.setName("instagram");
         request.setEmail("lotachukwu@gmail.com");
-
         passwordService.addPassword(request);
 
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
@@ -274,7 +270,6 @@ class PasswordServiceTest {
         saveRequest.setPassword("#*42winnerSer");
         saveRequest.setName("facebook");
         saveRequest.setEmail("lotachukwu@gmail.com");
-
         passwordService.addPassword(saveRequest);
 
         AddPasswordRequest request = new AddPasswordRequest();
@@ -283,16 +278,12 @@ class PasswordServiceTest {
         request.setPassword("@Femifemo^41");
         request.setName("instagram");
         request.setEmail("lotachukwu@gmail.com");
-
         passwordService.addPassword(request);
 
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
 
         UpdatePasswordRequest updateRequest = new UpdatePasswordRequest();
-//        updateRequest.setPassword("");
-        updateRequest.setEmail("lotachukwu@gmail.com");
-//        updateRequest.setName("");
-//        updateRequest.setUrl("");
+//        updateRequest.setEmail("lotachukwu@gmail.com");
         updateRequest.setUsername("femz_manny");
 
         UpdateResponse response = passwordService.update(2, updateRequest, request.getEmail());
@@ -364,7 +355,6 @@ class PasswordServiceTest {
     void tearDown(){
 
         passwordService.deleteAll();
-//        repo.deleteAll();
 
     }
 

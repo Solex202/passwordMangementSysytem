@@ -150,10 +150,10 @@ public class PasswordServiceImpl implements PasswordService{
         UpdateResponse response = new UpdateResponse();
         while(passwords.hasNext()){
             if(passwords.next().getId() == id){
-                 response.setUsername(updateRequest.getUsername());
+                passwords.next().setUsername(updateRequest.getUsername());
+                passwordManagerRepo.save(newUser);
+//                 response.setUsername(updateRequest.getUsername());
                  response.setMsg("password updated");
-
-//               response = passwords.next().setUsername(updateRequest.getUsername());
             }
         }
 
