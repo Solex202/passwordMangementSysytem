@@ -73,7 +73,8 @@ class PasswordServiceTest {
 //        userRequest.setEmail("lotaD@gmail.com");
         passwordService.createUser(userRequest);
 
-        LoginsRequest loginsRequest = new LoginsRequest();
+        LoginsRequest loginsRequest =  new LoginsRequest();
+//                .builder().password("deoalaD9@$!*Dee").email("lotaD@gmail.com").build();
         loginsRequest.setPassword("deoalaD9@$!*Dee");
         loginsRequest.setEmail("lotaD@gmail.com");
         LoginResponse loginResponse = passwordService.login(loginsRequest);
@@ -81,149 +82,149 @@ class PasswordServiceTest {
 
     }
 //
-//    @Test
-//    public void testThatUserCanBeCreatedWhenPasswordIsGreaterThan8AndContainsChars(){
-//        //given
-//        CreateUserRequest userRequest = new CreateUserRequest();
+    @Test
+    public void testThatUserCanBeCreatedWhenPasswordIsGreaterThan8AndContainsChars(){
+        //given
+        CreateUserRequest userRequest = CreateUserRequest.builder().password("deoy").email("lota@gmail.com").build();
 //        userRequest.setPassword("deoy");
 //        userRequest.setEmail("lota@gmail.com");
+
+        assertThrows(InvalidPasswordException.class, ()->passwordService.createUser(userRequest));
+    }
 //
-//        assertThrows(InvalidPasswordException.class, ()->passwordService.createUser(userRequest));
-//    }
 //
-//
-//    @Test
-//    public void testThatPasswordManagerCanAddPassword(){
-//
-//        //given
-//        CreateUserRequest userRequest = new CreateUserRequest();
+    @Test
+    public void testThatPasswordManagerCanAddPassword(){
+
+        //given
+         CreateUserRequest userRequest = CreateUserRequest.builder().password("deoalaD10@$!*Dee").email("lotaE@gmail.com").build();
 //        userRequest.setPassword("deoalaD10@$!*Dee");
 //        userRequest.setEmail("lotaE@gmail.com");
-//        passwordService.createUser(userRequest);
-//
-//        LoginsRequest loginsRequest = new LoginsRequest();
-//        loginsRequest.setPassword("deoalaD10@$!*Dee");
-//        loginsRequest.setEmail("lotaE@gmail.com");
-//        LoginResponse loginResponse = passwordService.login(loginsRequest);
-//        assertThat(loginResponse.getMsg(), is("login successful"));
-//
-//       AddPasswordRequest saveRequest = new AddPasswordRequest();
-//       saveRequest.setUrl("www.facebook.com");
-//       saveRequest.setUsername("solomon christian");
-//       saveRequest.setPassword("#solomon234");
-//       saveRequest.setName("facebook");
-//       saveRequest.setEmail("lotaE@gmail.com");
-//
-//       passwordService.addPassword(saveRequest);
-//
-//       assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(1));
-//    }
-//
-//    @Test
-//    public void testThatUserCanAddAnotherPassword() {
-//        //given
-//        CreateUserRequest userRequest = new CreateUserRequest();
+        passwordService.createUser(userRequest);
+
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("deoalaD10@$!*Dee");
+        loginsRequest.setEmail("lotaE@gmail.com");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
+
+       AddPasswordRequest saveRequest = new AddPasswordRequest();
+       saveRequest.setUrl("www.facebook.com");
+       saveRequest.setUsername("solomon christian");
+       saveRequest.setPassword("#solomon234");
+       saveRequest.setName("facebook");
+       saveRequest.setEmail("lotaE@gmail.com");
+
+       passwordService.addPassword(saveRequest);
+
+       assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(1));
+    }
+
+    @Test
+    public void testThatUserCanAddAnotherPassword() {
+        //given
+        CreateUserRequest userRequest = CreateUserRequest.builder().password("deoalaD1440@$!*Dee").email("lotachukwu@gmail.com").build();
 //        userRequest.setPassword("deoalaD1440@$!*Dee");
 //        userRequest.setEmail("lotachukwu@gmail.com");
-//        passwordService.createUser(userRequest);
+        passwordService.createUser(userRequest);
+
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("deoalaD1440@$!*Dee");
+        loginsRequest.setEmail("lotachukwu@gmail.com");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
+
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.facebook.com");
+        saveRequest.setUsername("femi awolowo");
+        saveRequest.setPassword("#*42winnerSer");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("lotachukwu@gmail.com");
+        passwordService.addPassword(saveRequest);
+
+        AddPasswordRequest request = new AddPasswordRequest();
+        request.setUrl("www.instagram.com");
+        request.setUsername("femz_man");
+        request.setPassword("@Femifemo^41");
+        request.setName("instagram");
+        request.setEmail("lotachukwu@gmail.com");
+        passwordService.addPassword(request);
+
+        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
+    }
 //
-//        LoginsRequest loginsRequest = new LoginsRequest();
-//        loginsRequest.setPassword("deoalaD1440@$!*Dee");
-//        loginsRequest.setEmail("lotachukwu@gmail.com");
-//        LoginResponse loginResponse = passwordService.login(loginsRequest);
-//        assertThat(loginResponse.getMsg(), is("login successful"));
-//
-//        AddPasswordRequest saveRequest = new AddPasswordRequest();
-//        saveRequest.setUrl("www.facebook.com");
-//        saveRequest.setUsername("femi awolowo");
-//        saveRequest.setPassword("#*42winnerSer");
-//        saveRequest.setName("facebook");
-//        saveRequest.setEmail("lotachukwu@gmail.com");
-//        passwordService.addPassword(saveRequest);
-//
-//        AddPasswordRequest request = new AddPasswordRequest();
-//        request.setUrl("www.instagram.com");
-//        request.setUsername("femz_man");
-//        request.setPassword("@Femifemo^41");
-//        request.setName("instagram");
-//        request.setEmail("lotachukwu@gmail.com");
-//        passwordService.addPassword(request);
-//
-//        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
-//    }
-//
-//    @Test
-//    public void testThatUserCanSearchFor_A_Url(){
-//        //given
-//        CreateUserRequest userRequest = new CreateUserRequest();
+    @Test
+    public void testThatUserCanSearchFor_A_Url(){
+        //given
+        CreateUserRequest userRequest = CreateUserRequest.builder().password("dejiDeji@1234").email("lotachukwuo@gmail.com").build();
 //        userRequest.setPassword("dejiDeji@1234");
 //        userRequest.setEmail("lotachukwuo@gmail.com");
-//        passwordService.createUser(userRequest);
+        passwordService.createUser(userRequest);
+
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("dejiDeji@1234");
+        loginsRequest.setEmail("lotachukwuo@gmail.com");
+        LoginResponse loginResponse = passwordService.login(loginsRequest);
+        assertThat(loginResponse.getMsg(), is("login successful"));
+
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.facebook.com");
+        saveRequest.setUsername("femi awolowo");
+        saveRequest.setPassword("#*42winnerSer");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("lotachukwuo@gmail.com");
+        passwordService.addPassword(saveRequest);
+
+        AddPasswordRequest request = new AddPasswordRequest();
+        request.setUrl("www.instagram.com");
+        request.setUsername("femz_man");
+        request.setPassword("@Femifemo^41");
+        request.setName("instagram");
+        request.setEmail("lotachukwuo@gmail.com");
+        passwordService.addPassword(request);
+
+        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
+
+        SearchUrlRequest searchUrlRequest = new SearchUrlRequest();
+        searchUrlRequest.setUrl("www.instagram.com");
+        searchUrlRequest.setEmail("lotachukwuo@gmail.com");
+
+        SearchUrlResponse searchUrlResponse = passwordService.searchUrl(searchUrlRequest);
+        assertThat(searchUrlResponse.getUsername(), is("femz_man"));
+        assertThat(searchUrlResponse.getPassword(), is("@Femifemo^41"));
+    }
 //
-//        LoginsRequest loginsRequest = new LoginsRequest();
-//        loginsRequest.setPassword("dejiDeji@1234");
-//        loginsRequest.setEmail("lotachukwuo@gmail.com");
-//        LoginResponse loginResponse = passwordService.login(loginsRequest);
-//        assertThat(loginResponse.getMsg(), is("login successful"));
+    @Test
+    public void testThatPasswordManagerCannotAddPasswordWithoutLoggingIn(){
+
+        //given
+        CreateUserRequest userRequest = CreateUserRequest.builder().password("deoalaD10@$!*Dee").email("lotaE@gmail.com").build();
+        userRequest.setPassword("deoalaD10@$!*Dee");
+        userRequest.setEmail("lotaE@gmail.com");
+        passwordService.createUser(userRequest);
+
+        AddPasswordRequest saveRequest = new AddPasswordRequest();
+        saveRequest.setUrl("www.facebook.com");
+        saveRequest.setUsername("solomon christian");
+        saveRequest.setPassword("#solomon234");
+        saveRequest.setName("facebook");
+        saveRequest.setEmail("lotaE@gmail.com");
+
+        assertThrows(CannotAddPasswordException.class, () ->passwordService.addPassword(saveRequest));
+    }
 //
-//        AddPasswordRequest saveRequest = new AddPasswordRequest();
-//        saveRequest.setUrl("www.facebook.com");
-//        saveRequest.setUsername("femi awolowo");
-//        saveRequest.setPassword("#*42winnerSer");
-//        saveRequest.setName("facebook");
-//        saveRequest.setEmail("lotachukwuo@gmail.com");
-//        passwordService.addPassword(saveRequest);
-//
-//        AddPasswordRequest request = new AddPasswordRequest();
-//        request.setUrl("www.instagram.com");
-//        request.setUsername("femz_man");
-//        request.setPassword("@Femifemo^41");
-//        request.setName("instagram");
-//        request.setEmail("lotachukwuo@gmail.com");
-//        passwordService.addPassword(request);
-//
-//        assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
-//
-//        SearchUrlRequest searchUrlRequest = new SearchUrlRequest();
-//        searchUrlRequest.setUrl("www.instagram.com");
-//        searchUrlRequest.setEmail("lotachukwuo@gmail.com");
-//
-//        SearchUrlResponse searchUrlResponse = passwordService.searchUrl(searchUrlRequest);
-//        assertThat(searchUrlResponse.getUsername(), is("femz_man"));
-//        assertThat(searchUrlResponse.getPassword(), is("@Femifemo^41"));
-//    }
-//
-//    @Test
-//    public void testThatPasswordManagerCannotAddPasswordWithoutLoggingIn(){
-//
-//        //given
-//        CreateUserRequest userRequest = new CreateUserRequest();
-//        userRequest.setPassword("deoalaD10@$!*Dee");
-//        userRequest.setEmail("lotaE@gmail.com");
-//        passwordService.createUser(userRequest);
-//
-//        AddPasswordRequest saveRequest = new AddPasswordRequest();
-//        saveRequest.setUrl("www.facebook.com");
-//        saveRequest.setUsername("solomon christian");
-//        saveRequest.setPassword("#solomon234");
-//        saveRequest.setName("facebook");
-//        saveRequest.setEmail("lotaE@gmail.com");
-//
-//        assertThrows(CannotAddPasswordException.class, () ->passwordService.addPassword(saveRequest));
-//    }
-//
-//    @Test
-//    public void testThatUnregisteredUserCannotLogin_throwException() {
-//        //given
-//        CreateUserRequest userRequest = new CreateUserRequest();
+    @Test
+    public void testThatUnregisteredUserCannotLogin_throwException() {
+        //given
+        CreateUserRequest userRequest = CreateUserRequest.builder().password("tolu@342#LOkPE").email("tolu@gmail.com").build();
 //        userRequest.setPassword("tolu@342#LOkPE");
 //        userRequest.setEmail("tolu@gmail.com");
-//
-//        LoginsRequest loginsRequest = new LoginsRequest();
-//        loginsRequest.setPassword("tolu@342#LOkPE");
-//
-//        assertThrows(UserNotFoundException.class, ()-> passwordService.login(loginsRequest));
-//    }
+
+        LoginsRequest loginsRequest = new LoginsRequest();
+        loginsRequest.setPassword("tolu@342#LOkPE");
+
+        assertThrows(UserNotFoundException.class, ()-> passwordService.login(loginsRequest));
+    }
 //
 //    @Test
 //    public void testThatUserCanDeletePassword() {

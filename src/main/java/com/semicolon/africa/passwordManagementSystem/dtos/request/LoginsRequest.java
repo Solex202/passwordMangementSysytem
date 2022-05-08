@@ -4,10 +4,9 @@ package com.semicolon.africa.passwordManagementSystem.dtos.request;
 import lombok.*;
 
 @Data
-@Builder
-//@AllArgsConstructor
-//@RequiredArgsConstructor
+
 @NoArgsConstructor
+//@Builder
 public class LoginsRequest {
 
     private String password;
