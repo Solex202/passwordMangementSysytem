@@ -47,10 +47,10 @@ public class PasswordController {
         return passwordService.getAllUsers();
     }
 
-    @DeleteMapping("/delete/{id}/{email}")
-    public ResponseEntity<?> deletePassword(@PathVariable int id, String email){
+    @DeleteMapping("/delete/{email}/{id}")
+    public ResponseEntity<?> deletePassword(@PathVariable String email, int id){
 
-            return new ResponseEntity<>(passwordService.delete(id, email), HttpStatus.OK);
+            return new ResponseEntity<>(passwordService.delete(email, id), HttpStatus.OK);
 
     }
 
@@ -72,8 +72,8 @@ public class PasswordController {
         }
     }
 
-    @PostMapping("/updateUrl")
-        public ResponseEntity<?> updateUrl(@RequestBody @PathVariable  int id,UpdatePasswordRequest request, String email){
+    @PatchMapping(path = "/{email}/{id}")
+        public ResponseEntity<?> updateUrl(@PathVariable  int id, @RequestBody UpdatePasswordRequest request,@PathVariable String email){
         return new ResponseEntity<>(passwordService.update(id,request,email), HttpStatus.OK);
 
     }

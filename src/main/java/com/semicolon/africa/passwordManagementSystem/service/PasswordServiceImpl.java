@@ -4,10 +4,7 @@ import com.semicolon.africa.passwordManagementSystem.data.model.User;
 import com.semicolon.africa.passwordManagementSystem.data.repository.PasswordManagerRepo;
 import com.semicolon.africa.passwordManagementSystem.dtos.request.*;
 import com.semicolon.africa.passwordManagementSystem.dtos.response.*;
-import com.semicolon.africa.passwordManagementSystem.exception.CannotAddPasswordException;
-import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
-import com.semicolon.africa.passwordManagementSystem.exception.UrlNotFoundException;
-import com.semicolon.africa.passwordManagementSystem.exception.UserNotFoundException;
+import com.semicolon.africa.passwordManagementSystem.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +20,8 @@ public class PasswordServiceImpl implements PasswordService{
 
     @Override
     public CreateUserResponse createUser(CreateUserRequest userRequest) {
+        System.out.println(userRequest.getEmail());
+        if(userAlreadyExist(userRequest.getEmail())) throw new UserAlreadyExistsException("user already exist, create another account");
         if(!passwordIsInvalid(userRequest.getPassword())) throw new InvalidPasswordException("invalid password");
 
         User newUser = new User();
@@ -35,6 +34,11 @@ public class PasswordServiceImpl implements PasswordService{
         CreateUserResponse response = new CreateUserResponse();
         response.setMsg("user created");
         return response;
+    }
+
+    private boolean userAlreadyExist(String email) {
+        return  passwordManagerRepo.findByEmail(email) != null;
+
     }
 
     private boolean passwordIsInvalid(String password) {
@@ -143,7 +147,7 @@ public class PasswordServiceImpl implements PasswordService{
     }
 
     @Override
-    public DeletePasswordResponse delete(int id, String email) {
+    public DeletePasswordResponse delete(String email, int id) {
         User newUser = passwordManagerRepo.findByEmail(email);
         List <PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
 
@@ -170,6 +174,11 @@ public class PasswordServiceImpl implements PasswordService{
               if(updateRequest.getUsername() != null)password.setUsername(updateRequest.getUsername());
               if(updateRequest.getPassword() != null) password.setPassword(updateRequest.getPassword());
                response.setMsg("updated");
+               response.setUsername(password.getUsername());
+               response.setUrl(password.getUrl());
+               response.setName(password.getName());
+               response.setPassword(password.getPassword());
+
                passwordManagerRepo.save(newUser);
            }
        });

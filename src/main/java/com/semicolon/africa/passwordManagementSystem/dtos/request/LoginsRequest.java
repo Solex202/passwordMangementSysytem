@@ -1,12 +1,10 @@
 package com.semicolon.africa.passwordManagementSystem.dtos.request;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
+@Builder
 //@AllArgsConstructor
 //@RequiredArgsConstructor
 @NoArgsConstructor
