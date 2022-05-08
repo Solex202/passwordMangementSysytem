@@ -3,9 +3,10 @@ package com.semicolon.africa.passwordManagementSystem.controllers;
 
 import com.semicolon.africa.passwordManagementSystem.data.model.User;
 import com.semicolon.africa.passwordManagementSystem.dtos.ApiResponse;
-import com.semicolon.africa.passwordManagementSystem.dtos.request.CreateUserRequest;
-import com.semicolon.africa.passwordManagementSystem.dtos.request.LoginsRequest;
+import com.semicolon.africa.passwordManagementSystem.dtos.request.*;
+import com.semicolon.africa.passwordManagementSystem.exception.CannotAddPasswordException;
 import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordException;
+import com.semicolon.africa.passwordManagementSystem.exception.UrlNotFoundException;
 import com.semicolon.africa.passwordManagementSystem.exception.UserNotFoundException;
 import com.semicolon.africa.passwordManagementSystem.service.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,35 @@ public class PasswordController {
         return passwordService.getAllUsers();
     }
 
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<?> delete(@PathVariable int id, String email){
-//
-//            return new ResponseEntity<>(passwordService.delete(id, email), HttpStatus.OK);
-//
-//    }
+    @DeleteMapping("/delete/{id}/{email}")
+    public ResponseEntity<?> deletePassword(@PathVariable int id, String email){
+
+            return new ResponseEntity<>(passwordService.delete(id, email), HttpStatus.OK);
+
+    }
+
+    @PostMapping("/addPassword")
+    public  ResponseEntity<?> addPassword(@RequestBody AddPasswordRequest request){
+        try {
+            return new ResponseEntity<>(passwordService.addPassword(request), HttpStatus.OK);
+        }catch(CannotAddPasswordException ex){
+            return  new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/searchUrl")
+    public ResponseEntity<?> searchPassword(@RequestBody SearchUrlRequest request){
+        try{
+            return new ResponseEntity<>(passwordService.searchUrl(request), HttpStatus.OK);
+        }catch (UrlNotFoundException ex){
+            return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/updateUrl")
+        public ResponseEntity<?> updateUrl(@RequestBody @PathVariable  int id,UpdatePasswordRequest request, String email){
+        return new ResponseEntity<>(passwordService.update(id,request,email), HttpStatus.OK);
+
+    }
+
 }

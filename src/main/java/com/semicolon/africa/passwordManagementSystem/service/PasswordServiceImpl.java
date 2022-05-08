@@ -62,15 +62,15 @@ public class PasswordServiceImpl implements PasswordService{
             return loginResponse;
         }
         else {
-            throw new UserNotFoundException("please create an account");
+            throw new UserNotFoundException("please create an account to log in");
         }
     }
 
     @Override
     public AddPasswordResponse addPassword(AddPasswordRequest saveRequest) {
             User newUser = passwordManagerRepo.findByEmail(saveRequest.getEmail());
-        if(!newUser.isLoginStatus()) {
-            throw new CannotAddPasswordException("please log in");
+            if(!newUser.isLoginStatus()) {
+                throw new CannotAddPasswordException("oops! Cannot add password,please log in");
         }
             else {
 
@@ -98,24 +98,43 @@ public class PasswordServiceImpl implements PasswordService{
         return newUser.getRegisteredPassword();
     }
 
+//    @Override
+//    public SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest) {
+////       User user= passwordManagerRepo.findByEmail(searchUrlRequest.getEmail());
+//
+//       List<PasswordToSave> allPassword = getListOfSavedPassword(searchUrlRequest.getEmail());
+//       SearchUrlResponse response = new SearchUrlResponse();
+//
+//       allPassword.forEach(password->{
+//               System.out.println(searchUrlRequest.getUrl() + "----> " + password.getUrl());
+//           if(password.getUrl().equals(searchUrlRequest.getUrl())){
+//               response.setPassword(password.getPassword());
+//               response.setUsername(password.getUsername());
+//           } else throw new UrlNotFoundException("Not found");
+////
+//       });
+//       return response;
+//    }
+
     @Override
     public SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest) {
-       User user= passwordManagerRepo.findByEmail(searchUrlRequest.getEmail());
 
-       List<PasswordToSave> allPassword = user.getRegisteredPassword();
+        List<PasswordToSave> allPassword = getListOfSavedPassword(searchUrlRequest.getEmail());
         SearchUrlResponse response = new SearchUrlResponse();
-       allPassword.forEach(password->{
-           System.out.println(password.getUrl() +"=====>" + searchUrlRequest.getUrl()) ;
-           if (password.getUrl().equals(searchUrlRequest.getUrl())){
-               response.setPassword(password.getPassword());
-               response.setUsername(password.getUsername());
-           }
-//           else{
-//
-//           throw new UrlNotFoundException("Not found");
-//           }
-       });
-       return response;
+
+        final PasswordToSave[] passwordToSave = new PasswordToSave[1];
+
+        allPassword.forEach(password->{
+            if(password.getUrl().equals(searchUrlRequest.getUrl())){
+                passwordToSave[0] =password;
+            }
+        });
+        if (passwordToSave[0] == null){
+            throw new UrlNotFoundException("url Not found");
+        }
+        response.setPassword(passwordToSave[0].getPassword());
+        response.setUsername(passwordToSave[0].getUsername());
+        return response;
     }
 
     @Override
@@ -124,7 +143,7 @@ public class PasswordServiceImpl implements PasswordService{
     }
 
     @Override
-    public void delete(int id, String email) {
+    public DeletePasswordResponse delete(int id, String email) {
         User newUser = passwordManagerRepo.findByEmail(email);
         List <PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
 
@@ -136,45 +155,50 @@ public class PasswordServiceImpl implements PasswordService{
             }
         }
         passwordManagerRepo.save(newUser);
-//        if(listOfPassword.contains(listOfPassword.get(id))){
-//            listOfPassword.remove(listOfPassword.get(id));
-//            passwordManagerRepo.save(newUser);
-//        }
+
+        return null;
     }
 
     @Override
     public UpdateResponse update(int id, UpdatePasswordRequest updateRequest, String email) {
         User newUser = passwordManagerRepo.findByEmail(email);
         List<PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
-        ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
         UpdateResponse response = new UpdateResponse();
-        while(passwords.hasNext()){
-            if(passwords.next().getId() == id){
-                passwords.next().setUsername(updateRequest.getUsername());
-                passwordManagerRepo.save(newUser);
-//                 response.setUsername(updateRequest.getUsername());
-                 response.setMsg("password updated");
-            }
-        }
+       listOfPassword.forEach((password)->{
+           if (password.getId() == id){
+
+              if(updateRequest.getUsername() != null)password.setUsername(updateRequest.getUsername());
+              if(updateRequest.getPassword() != null) password.setPassword(updateRequest.getPassword());
+               response.setMsg("updated");
+               passwordManagerRepo.save(newUser);
+           }
+       });
 
         return response;
     }
 
 
-
 //    @Override
-//    public UpdateResponse update(UpdatePasswordRequest updateRequest) {
-//        User newUser = passwordManagerRepo.findByEmail(updateRequest.getEmail());
-//        List<PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
-//        log.info(listOfPassword.toString());
-////        ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
-////        while (passwords.hasNext()) {
-////           if(passwords.next().getUsername().equals(updateRequest)){
-////               listOfPassword.up
+//    public SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest) {
+//        User user= passwordManagerRepo.findByEmail(searchUrlRequest.getEmail());
+//
+//        List<PasswordToSave> allPassword = user.getRegisteredPassword();
+//        SearchUrlResponse response = new SearchUrlResponse();
+//        allPassword.forEach(password->{
+//            System.out.println(password.getUrl() +"=====>" + searchUrlRequest.getUrl()) ;
+//            if (password.getUrl().equals(searchUrlRequest.getUrl())){
+//                response.setPassword(password.getPassword());
+//                response.setUsername(password.getUsername());
+//            }
+////           else{
+////
+////           throw new UrlNotFoundException("Not found");
 ////           }
-////        }
-//        return null;
+//        });
+//        return response;
 //    }
+
+
 
 
 }
