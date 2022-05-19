@@ -1,6 +1,5 @@
 package com.semicolon.africa.passwordManagementSystem.dtos.request;
 
-
 import lombok.*;
 
 @Data

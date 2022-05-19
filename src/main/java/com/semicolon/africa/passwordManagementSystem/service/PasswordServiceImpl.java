@@ -24,21 +24,25 @@ public class PasswordServiceImpl implements PasswordService{
         if(userAlreadyExist(userRequest.getEmail())) throw new UserAlreadyExistsException("user already exist, create another account");
         if(!passwordIsInvalid(userRequest.getPassword())) throw new InvalidPasswordException("invalid password");
 
+        System.out.println(userRequest.getEmail());
         User newUser = new User();
         newUser.setPassword(userRequest.getPassword());
+        log.info("from here ----->{}", newUser.getPassword());
         newUser.setEmail(userRequest.getEmail());
 
-        passwordManagerRepo.save(newUser);
+        User savedUser = passwordManagerRepo.save(newUser);
         log.info(String.valueOf(newUser));
 
         CreateUserResponse response = new CreateUserResponse();
+        response.setPassword(savedUser.getPassword());
+        response.setEmail(savedUser.getEmail());
         response.setMsg("user created");
         return response;
     }
 
     private boolean userAlreadyExist(String email) {
+        log.info("user-->{}", passwordManagerRepo.findByEmail(email));
         return  passwordManagerRepo.findByEmail(email) != null;
-
     }
 
     private boolean passwordIsInvalid(String password) {
@@ -49,6 +53,8 @@ public class PasswordServiceImpl implements PasswordService{
 
        return password.matches(isValid);
     }
+
+//    08037375432
 
     @Override
     public List<User> getAllUsers() {
@@ -75,7 +81,11 @@ public class PasswordServiceImpl implements PasswordService{
             User newUser = passwordManagerRepo.findByEmail(saveRequest.getEmail());
             if(!newUser.isLoginStatus()) {
                 throw new CannotAddPasswordException("oops! Cannot add password,please log in");
+
         }
+//            if(urlAlreadyExist(User user)){
+//
+//            }
             else {
 
             PasswordToSave passwordToSave = new PasswordToSave();
@@ -150,28 +160,31 @@ public class PasswordServiceImpl implements PasswordService{
     public DeletePasswordResponse delete(String email, int id) {
         User newUser = passwordManagerRepo.findByEmail(email);
         List <PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
+        DeletePasswordResponse response = new DeletePasswordResponse();
+
 
         ListIterator<PasswordToSave> passwords = listOfPassword.listIterator();
         while (passwords.hasNext()) {
             if(passwords.next().getId() == id){
                 listOfPassword.remove(passwords.next());
+                response.setMsg("password deleted");
                 break;
             }
         }
         passwordManagerRepo.save(newUser);
 
-        return null;
+        return response;
     }
 
     @Override
-    public UpdateResponse update(int id, UpdatePasswordRequest updateRequest, String email) {
+    public UpdateResponse update(int id, String email, UpdatePasswordRequest updateRequest) {
         User newUser = passwordManagerRepo.findByEmail(email);
         List<PasswordToSave> listOfPassword = newUser.getRegisteredPassword();
         UpdateResponse response = new UpdateResponse();
        listOfPassword.forEach((password)->{
-           if (password.getId() == id){
+           if(password.getId() == id){
 
-              if(updateRequest.getUsername() != null)password.setUsername(updateRequest.getUsername());
+              if(updateRequest.getUsername() != null) password.setUsername(updateRequest.getUsername());
               if(updateRequest.getPassword() != null) password.setPassword(updateRequest.getPassword());
                response.setMsg("updated");
                response.setUsername(password.getUsername());
@@ -184,6 +197,11 @@ public class PasswordServiceImpl implements PasswordService{
        });
 
         return response;
+    }
+
+    @Override
+    public UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequest profileRequest, String email) {
+        return null;
     }
 
 

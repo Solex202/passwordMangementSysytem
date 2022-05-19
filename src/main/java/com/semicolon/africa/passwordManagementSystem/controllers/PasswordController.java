@@ -9,6 +9,7 @@ import com.semicolon.africa.passwordManagementSystem.exception.InvalidPasswordEx
 import com.semicolon.africa.passwordManagementSystem.exception.UrlNotFoundException;
 import com.semicolon.africa.passwordManagementSystem.exception.UserNotFoundException;
 import com.semicolon.africa.passwordManagementSystem.service.PasswordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 public class PasswordController {
 
     @Autowired
@@ -25,6 +28,7 @@ public class PasswordController {
 
     @PostMapping("/createUser")
     public ResponseEntity<?> response(@RequestBody CreateUserRequest request){
+        log.info("request->{}", request);
         try{
 
         return new ResponseEntity<>(passwordService.createUser(request), HttpStatus.OK);
@@ -42,13 +46,13 @@ public class PasswordController {
         }
     }
 
-    @GetMapping("/getUsers")
+    @GetMapping("/getAllUsers")
     public List<User> getAllUsers(){
         return passwordService.getAllUsers();
     }
 
-    @DeleteMapping("/delete/{email}/{id}")
-    public ResponseEntity<?> deletePassword(@PathVariable String email, int id){
+    @DeleteMapping("/deleteUrl/{email}/{id}")
+    public ResponseEntity<?> delete(@PathVariable String email, int id){
 
             return new ResponseEntity<>(passwordService.delete(email, id), HttpStatus.OK);
 
@@ -72,9 +76,9 @@ public class PasswordController {
         }
     }
 
-    @PatchMapping(path = "/{email}/{id}")
-        public ResponseEntity<?> updateUrl(@PathVariable  int id, @RequestBody UpdatePasswordRequest request,@PathVariable String email){
-        return new ResponseEntity<>(passwordService.update(id,request,email), HttpStatus.OK);
+    @PatchMapping(path = "updateUrl/{email}/{id}")
+        public ResponseEntity<?> updateUrl(@PathVariable  int id,@PathVariable String email, @RequestBody UpdatePasswordRequest request){
+        return new ResponseEntity<>(passwordService.update(id,email, request), HttpStatus.OK);
 
     }
 
