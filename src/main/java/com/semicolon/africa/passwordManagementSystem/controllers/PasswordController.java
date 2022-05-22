@@ -30,8 +30,7 @@ public class PasswordController {
     public ResponseEntity<?> response(@RequestBody CreateUserRequest request){
         log.info("request->{}", request);
         try{
-
-        return new ResponseEntity<>(passwordService.createUser(request), HttpStatus.OK);
+            return new ResponseEntity<>(passwordService.createUser(request), HttpStatus.OK);
         }catch(InvalidPasswordException ex){
             return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
@@ -39,7 +38,6 @@ public class PasswordController {
     @PostMapping("/login")
     public ResponseEntity<?> response(@RequestBody LoginsRequest request){
         try{
-
             return new ResponseEntity<>(passwordService.login(request), HttpStatus.OK);
         }catch(UserNotFoundException ex){
             return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.BAD_REQUEST);

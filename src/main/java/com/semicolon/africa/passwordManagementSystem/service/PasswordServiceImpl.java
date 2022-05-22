@@ -54,8 +54,6 @@ public class PasswordServiceImpl implements PasswordService{
        return password.matches(isValid);
     }
 
-//    08037375432
-
     @Override
     public List<User> getAllUsers() {
         return passwordManagerRepo.findAll();
@@ -81,10 +79,9 @@ public class PasswordServiceImpl implements PasswordService{
             User newUser = passwordManagerRepo.findByEmail(saveRequest.getEmail());
             if(!newUser.isLoginStatus()) {
                 throw new CannotAddPasswordException("oops! Cannot add password,please log in");
-
-        }
-//            if(urlAlreadyExist(User user)){
-//
+            }
+//            if(urlAlreadyExist(getListOfSavedPassword(saveRequest.getEmail()), saveRequest)){
+//                throw new UrlAlreadyExistsException("url already exist ");
 //            }
             else {
 
@@ -105,6 +102,10 @@ public class PasswordServiceImpl implements PasswordService{
             return response;
         }
     }
+
+//    private boolean urlAlreadyExist(List<PasswordToSave> listOfSavedPassword, AddPasswordRequest saveRequest) {
+//        return listOfSavedPassword.contains(saveRequest);
+//    }
 
     @Override
     public List<PasswordToSave> getListOfSavedPassword(String email) {
@@ -224,8 +225,5 @@ public class PasswordServiceImpl implements PasswordService{
 //        });
 //        return response;
 //    }
-
-
-
 
 }

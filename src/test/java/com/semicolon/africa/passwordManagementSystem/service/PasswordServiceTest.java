@@ -61,7 +61,6 @@ class PasswordServiceTest {
         passwordService.createUser(userRequest);
 
         LoginsRequest loginsRequest =  new LoginsRequest();
-//                .builder().password("deoalaD9@$!*Dee").email("lotaD@gmail.com").build();
         loginsRequest.setPassword("deoalaD9@$!*Dee");
         loginsRequest.setEmail("lotaD@gmail.com");
         LoginResponse loginResponse = passwordService.login(loginsRequest);
@@ -72,7 +71,6 @@ class PasswordServiceTest {
     public void testThatUserCanBeCreatedWhenPasswordIsGreaterThan8AndContainsChars(){
         //given
         CreateUserRequest userRequest = CreateUserRequest.builder().password("deoy").email("lota@gmail.com").build();
-
         assertThrows(InvalidPasswordException.class, ()->passwordService.createUser(userRequest));
     }
 
@@ -131,38 +129,38 @@ class PasswordServiceTest {
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
     }
 
-    @Test
-    public void testThatUserCannotAdd_A_ParticularUrlTwice(){
-        //given
-        CreateUserRequest request = CreateUserRequest.builder().password("#mAlikMan123").email("malik@gmail.com").build();
-        passwordService.createUser(request);
-
-        LoginsRequest loginsRequest = new LoginsRequest();
-        loginsRequest.setPassword("#mAlikMan123");
-        loginsRequest.setEmail("malik@gmail.com");
-
-        LoginResponse response = passwordService.login(loginsRequest);
-        assertThat(response.getMsg(), is("login successful"));
-        //when
-        AddPasswordRequest saveRequest = new AddPasswordRequest();
-        saveRequest.setUrl("www.facebook.com");
-        saveRequest.setUsername("juliana shugs");
-        saveRequest.setPassword("#*julyJayjay123");
-        saveRequest.setName("facebook");
-        saveRequest.setEmail("malik@gmail.com");
-        passwordService.addPassword(saveRequest);
-
-        AddPasswordRequest saveRequest2 = new AddPasswordRequest();
-        saveRequest2.setUrl("www.facebook.com");
-        saveRequest2.setUsername("juliana shugs");
-        saveRequest2.setPassword("#*julyJayjay123");
-        saveRequest2.setName("facebook");
-        saveRequest2.setEmail("malik@gmail.com");
-
-        assertThrows(UrlAlreadyExistsException.class, ()-> passwordService.addPassword(saveRequest2));
-
-
-    }
+//    @Test
+//    public void testThatUserCannotAdd_A_ParticularUrlTwice(){
+//        //given
+//        CreateUserRequest request = CreateUserRequest.builder().password("#mAlikMan123").email("malik@gmail.com").build();
+//        passwordService.createUser(request);
+//
+//        LoginsRequest loginsRequest = new LoginsRequest();
+//        loginsRequest.setPassword("#mAlikMan123");
+//        loginsRequest.setEmail("malik@gmail.com");
+//
+//        LoginResponse response = passwordService.login(loginsRequest);
+//        assertThat(response.getMsg(), is("login successful"));
+//        //when
+//        AddPasswordRequest saveRequest = new AddPasswordRequest();
+//        saveRequest.setUrl("www.facebook.com");
+//        saveRequest.setUsername("juliana shugs");
+//        saveRequest.setPassword("#*julyJayjay123");
+//        saveRequest.setName("facebook");
+//        saveRequest.setEmail("malik@gmail.com");
+//        passwordService.addPassword(saveRequest);
+//
+//        AddPasswordRequest saveRequest2 = new AddPasswordRequest();
+//        saveRequest2.setUrl("www.facebook.com");
+//        saveRequest2.setUsername("juliana shugs");
+//        saveRequest2.setPassword("#*julyJayjay123");
+//        saveRequest2.setName("facebook");
+//        saveRequest2.setEmail("malik@gmail.com");
+//
+//        assertThrows(UrlAlreadyExistsException.class, ()-> passwordService.addPassword(saveRequest2));
+//
+//
+//    }
     @Test
     public void testThatUserCanSearchFor_A_Url(){
         //given
