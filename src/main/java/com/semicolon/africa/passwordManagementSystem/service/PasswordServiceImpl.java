@@ -69,9 +69,9 @@ public class PasswordServiceImpl implements PasswordService{
             loginResponse.setMsg("login successful");
             return loginResponse;
         }
-        else {
+//        else {
             throw new UserNotFoundException("please create an account to log in");
-        }
+//        }
     }
 
     @Override
@@ -83,7 +83,6 @@ public class PasswordServiceImpl implements PasswordService{
 //            if(urlAlreadyExist(getListOfSavedPassword(saveRequest.getEmail()), saveRequest)){
 //                throw new UrlAlreadyExistsException("url already exist ");
 //            }
-            else {
 
             PasswordToSave passwordToSave = new PasswordToSave();
             passwordToSave.setId(getListOfSavedPassword(saveRequest.getEmail()).size() + 1);
@@ -100,7 +99,6 @@ public class PasswordServiceImpl implements PasswordService{
             AddPasswordResponse response = new AddPasswordResponse();
             response.setMessage("password registered");
             return response;
-        }
     }
 
 //    private boolean urlAlreadyExist(List<PasswordToSave> listOfSavedPassword, AddPasswordRequest saveRequest) {
@@ -115,7 +113,7 @@ public class PasswordServiceImpl implements PasswordService{
 
 //    @Override
 //    public SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest) {
-////       User user= passwordManagerRepo.findByEmail(searchUrlRequest.getEmail());
+//       User user= passwordManagerRepo.findByEmail(searchUrlRequest.getEmail());
 //
 //       List<PasswordToSave> allPassword = getListOfSavedPassword(searchUrlRequest.getEmail());
 //       SearchUrlResponse response = new SearchUrlResponse();
@@ -126,7 +124,7 @@ public class PasswordServiceImpl implements PasswordService{
 //               response.setPassword(password.getPassword());
 //               response.setUsername(password.getUsername());
 //           } else throw new UrlNotFoundException("Not found");
-////
+//
 //       });
 //       return response;
 //    }
@@ -218,10 +216,10 @@ public class PasswordServiceImpl implements PasswordService{
 //                response.setPassword(password.getPassword());
 //                response.setUsername(password.getUsername());
 //            }
-////           else{
-////
-////           throw new UrlNotFoundException("Not found");
-////           }
+//           else{
+//
+//           throw new UrlNotFoundException("Not found");
+//           }
 //        });
 //        return response;
 //    }
