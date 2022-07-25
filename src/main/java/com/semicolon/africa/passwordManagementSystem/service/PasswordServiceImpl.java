@@ -22,9 +22,8 @@ public class PasswordServiceImpl implements PasswordService{
     public CreateUserResponse createUser(CreateUserRequest userRequest) {
         System.out.println(userRequest.getEmail());
         if(userAlreadyExist(userRequest.getEmail())) throw new UserAlreadyExistsException("user already exist, create another account");
-        if(!passwordIsInvalid(userRequest.getPassword())) throw new InvalidPasswordException("invalid password");
+        if(!passwordIsValid(userRequest.getPassword())) throw new InvalidPasswordException("invalid password");
 
-        System.out.println(userRequest.getEmail());
         User newUser = new User();
         newUser.setPassword(userRequest.getPassword());
         log.info("from here ----->{}", newUser.getPassword());
@@ -45,11 +44,11 @@ public class PasswordServiceImpl implements PasswordService{
         return  passwordManagerRepo.findByEmail(email) != null;
     }
 
-    private boolean passwordIsInvalid(String password) {
+    private boolean passwordIsValid(String password) {
        String isValid = "^(?=.*[0-9])"
                + "(?=.*[a-z])(?=.*[A-Z])"
                + "(?=.*[@#$%^&+=])"
-               + "(?=\\S+$).{12,20}$";
+               + "(?=\\S+$).{8,20}$";
 
        return password.matches(isValid);
     }
@@ -69,9 +68,8 @@ public class PasswordServiceImpl implements PasswordService{
             loginResponse.setMsg("login successful");
             return loginResponse;
         }
-//        else {
+
             throw new UserNotFoundException("please create an account to log in");
-//        }
     }
 
     @Override
@@ -80,9 +78,6 @@ public class PasswordServiceImpl implements PasswordService{
             if(!newUser.isLoginStatus()) {
                 throw new CannotAddPasswordException("oops! Cannot add password,please log in");
             }
-//            if(urlAlreadyExist(getListOfSavedPassword(saveRequest.getEmail()), saveRequest)){
-//                throw new UrlAlreadyExistsException("url already exist ");
-//            }
 
             PasswordToSave passwordToSave = new PasswordToSave();
             passwordToSave.setId(getListOfSavedPassword(saveRequest.getEmail()).size() + 1);
@@ -93,17 +88,12 @@ public class PasswordServiceImpl implements PasswordService{
 
             newUser.getRegisteredPassword().add(passwordToSave);
 
-            log.info(passwordToSave.getId() +"========>");
-
             passwordManagerRepo.save(newUser);
             AddPasswordResponse response = new AddPasswordResponse();
             response.setMessage("password registered");
             return response;
     }
 
-//    private boolean urlAlreadyExist(List<PasswordToSave> listOfSavedPassword, AddPasswordRequest saveRequest) {
-//        return listOfSavedPassword.contains(saveRequest);
-//    }
 
     @Override
     public List<PasswordToSave> getListOfSavedPassword(String email) {
@@ -197,31 +187,50 @@ public class PasswordServiceImpl implements PasswordService{
 
         return response;
     }
-
-    @Override
-    public UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequest profileRequest, String email) {
-        return null;
-    }
-
-
-//    @Override
-//    public SearchUrlResponse searchUrl(SearchUrlRequest searchUrlRequest) {
-//        User user= passwordManagerRepo.findByEmail(searchUrlRequest.getEmail());
+    //    @Test
+//    void testThatUserCanEditPassword() {
+//        //given
+//        AddUserRequest request = AddUserRequest
+//                .builder()
+//                .firstName("adeola")
+//                .lastName("oladeji")
+//                .email("adeolaoladeji@gmail.com")
+//                .password("deedeji123")
+//                .confirmPassword("deedeji123")
+//                .gender(Gender.FEMALE)
+//                .build();
+//        //when
+//        userService.createUser(request);
 //
-//        List<PasswordToSave> allPassword = user.getRegisteredPassword();
-//        SearchUrlResponse response = new SearchUrlResponse();
-//        allPassword.forEach(password->{
-//            System.out.println(password.getUrl() +"=====>" + searchUrlRequest.getUrl()) ;
-//            if (password.getUrl().equals(searchUrlRequest.getUrl())){
-//                response.setPassword(password.getPassword());
-//                response.setUsername(password.getUsername());
-//            }
-//           else{
+//        //given
+//        AddUserRequest request2 = AddUserRequest
+//                .builder()
+//                .firstName("mercy")
+//                .lastName("chioma")
+//                .email("mercy@gmail.com")
+//                .password("mercySaidNo")
+//                .confirmPassword("mercySaidNo")
+//                .gender(Gender.FEMALE)
+//                .build();
 //
-//           throw new UrlNotFoundException("Not found");
-//           }
-//        });
-//        return response;
+//        userService.createUser(request2);
+//
+//        assertThat(userService.getAllUser().size(), is(2));
+//
+//        UpdateProfileRequest updateRequest = new UpdateProfileRequest();
+//        updateRequest.setPassword("mercy1234");
+//
+//        String response = userService.updateUser(request2.getEmail(), updateRequest);
+//        System.out.println(userService.getAllUser());
+//
+//        FindUserResponse response2 = userService.findUser(request2.getEmail());
+//
+//        //assert
+//        assertThat(response, is("profile updated"));
+//        assertThat(response2.getFirstName(),is("mercy"));
+//        assertThat(response2.getLastName(),is("chioma"));
+//        assertThat(response2.getPassword(),is("mercy1234"));
+//        assertThat(response2.getEmail(),is("mercy@gmail.com"));
 //    }
 
 }

@@ -1,6 +1,5 @@
 package com.semicolon.africa.passwordManagementSystem.controllers;
 
-
 import com.semicolon.africa.passwordManagementSystem.data.model.User;
 import com.semicolon.africa.passwordManagementSystem.dtos.ApiResponse;
 import com.semicolon.africa.passwordManagementSystem.dtos.request.*;
@@ -52,8 +51,7 @@ public class PasswordController {
     @DeleteMapping("/deleteUrl/{email}/{id}")
     public ResponseEntity<?> delete(@PathVariable String email, int id){
 
-            return new ResponseEntity<>(passwordService.delete(email, id), HttpStatus.OK);
-
+        return new ResponseEntity<>(passwordService.delete(email, id), HttpStatus.OK);
     }
 
     @PostMapping("/addPassword")

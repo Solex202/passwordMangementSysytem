@@ -25,5 +25,4 @@ public interface PasswordService {
 
     UpdateResponse update(int id, String email, UpdatePasswordRequest updateRequest);
 
-    UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequest profileRequest, String email);
 }

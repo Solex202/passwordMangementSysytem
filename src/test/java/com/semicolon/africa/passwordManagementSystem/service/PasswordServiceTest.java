@@ -129,38 +129,7 @@ class PasswordServiceTest {
         assertThat(passwordService.getListOfSavedPassword(userRequest.getEmail()).size(), is(2));
     }
 
-//    @Test
-//    public void testThatUserCannotAdd_A_ParticularUrlTwice(){
-//        //given
-//        CreateUserRequest request = CreateUserRequest.builder().password("#mAlikMan123").email("malik@gmail.com").build();
-//        passwordService.createUser(request);
-//
-//        LoginsRequest loginsRequest = new LoginsRequest();
-//        loginsRequest.setPassword("#mAlikMan123");
-//        loginsRequest.setEmail("malik@gmail.com");
-//
-//        LoginResponse response = passwordService.login(loginsRequest);
-//        assertThat(response.getMsg(), is("login successful"));
-//        //when
-//        AddPasswordRequest saveRequest = new AddPasswordRequest();
-//        saveRequest.setUrl("www.facebook.com");
-//        saveRequest.setUsername("juliana shugs");
-//        saveRequest.setPassword("#*julyJayjay123");
-//        saveRequest.setName("facebook");
-//        saveRequest.setEmail("malik@gmail.com");
-//        passwordService.addPassword(saveRequest);
-//
-//        AddPasswordRequest saveRequest2 = new AddPasswordRequest();
-//        saveRequest2.setUrl("www.facebook.com");
-//        saveRequest2.setUsername("juliana shugs");
-//        saveRequest2.setPassword("#*julyJayjay123");
-//        saveRequest2.setName("facebook");
-//        saveRequest2.setEmail("malik@gmail.com");
-//
-//        assertThrows(UrlAlreadyExistsException.class, ()-> passwordService.addPassword(saveRequest2));
-//
-//
-//    }
+
     @Test
     public void testThatUserCanSearchFor_A_Url(){
         //given
@@ -222,10 +191,11 @@ class PasswordServiceTest {
     @Test
     public void testThatUnregisteredUserCannotLogin_throwException() {
         //given
-        CreateUserRequest userRequest = CreateUserRequest.builder().password("tolu@342#LOkPE").email("tolu@gmail.com").build();
+//        CreateUserRequest userRequest = CreateUserRequest.builder().password("tolu@342#LOkPE").email("tolu@gmail.com").build();
 
         LoginsRequest loginsRequest = new LoginsRequest();
         loginsRequest.setPassword("tolu@342#LOkPE");
+        loginsRequest.setEmail("chima@gmail.com");
 
         assertThrows(UserNotFoundException.class, ()-> passwordService.login(loginsRequest));
     }
@@ -391,26 +361,6 @@ class PasswordServiceTest {
         assertThrows(UrlNotFoundException.class, ()->passwordService.searchUrl(searchUrlRequest));
     }
 
-//    @Test
-//    public void testThatRegisteredUserCanUpdateProfile(){
-//        CreateUserRequest request = CreateUserRequest.builder().password("#solo4jesu").email("lotachi@gmail.com").build();
-//        passwordService.createUser(request);
-//
-//        LoginsRequest loginsRequest = new LoginsRequest();
-//        loginsRequest.setPassword("#solo4jesu");
-//        loginsRequest.setEmail("lotachi@gmail.com");
-//
-//        LoginResponse response = passwordService.login(loginsRequest);
-//
-//        assertThat(response.getMsg(), is("login successful"));
-//
-//        UpdateUserProfileRequest profileRequest = new UpdateUserProfileRequest();
-//        profileRequest.setPassword("new passwords");
-//
-//        UpdateUserProfileResponse profileResponse = passwordService.updateUserProfile(profileRequest,request.getEmail());
-//        assertThat(profileResponse.getMsg(),is("username updated"));
-////        profileRequest.setEmail("");
-//    }
 
     @AfterEach
     void tearDown(){
