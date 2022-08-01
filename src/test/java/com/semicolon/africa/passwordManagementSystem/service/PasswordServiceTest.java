@@ -168,9 +168,9 @@ class PasswordServiceTest {
         assertThat(searchUrlResponse.getUsername(), is("femz_man"));
         assertThat(searchUrlResponse.getPassword(), is("@Femifemo^41"));
     }
-//
+
     @Test
-    public void testThatPasswordManagerCannotAddPasswordWithoutLoggingIn(){
+    public void testThatPasswordManagerCannotAddUrlWithoutLoggingIn(){
 
         //given
         CreateUserRequest userRequest = CreateUserRequest.builder().password("deoalaD10@$!*Dee").email("lotaE@gmail.com").build();
@@ -191,17 +191,16 @@ class PasswordServiceTest {
     @Test
     public void testThatUnregisteredUserCannotLogin_throwException() {
         //given
-//        CreateUserRequest userRequest = CreateUserRequest.builder().password("tolu@342#LOkPE").email("tolu@gmail.com").build();
-
         LoginsRequest loginsRequest = new LoginsRequest();
         loginsRequest.setPassword("tolu@342#LOkPE");
         loginsRequest.setEmail("chima@gmail.com");
 
+        //assert
         assertThrows(UserNotFoundException.class, ()-> passwordService.login(loginsRequest));
     }
 
     @Test
-    public void testThatUserCanDeletePassword() {
+    public void testThatUserCanDeleteUrl() {
         //given
         CreateUserRequest userRequest = CreateUserRequest.builder().password("deoalaD1440@$!*Dee").email("lotachukwu@gmail.com").build();
         passwordService.createUser(userRequest);
@@ -237,7 +236,7 @@ class PasswordServiceTest {
     }
 
     @Test
-    public void testThatUserCanUpdatePassword_username(){
+    public void testThatUserCanUpdateUrl_username(){
         //given
         CreateUserRequest userRequest = CreateUserRequest.builder().password("deoalaD1440@$!*Dee").email("lotachukwu@gmail.com").build();
         passwordService.createUser(userRequest);
@@ -275,7 +274,7 @@ class PasswordServiceTest {
         searchUrlRequest.setEmail("lotachukwu@gmail.com");
 
         SearchUrlResponse searchUrlResponse = passwordService.searchUrl(searchUrlRequest);
-        assertThat(response.getMsg(),is("updated"));
+        assertThat(response.getMsg(),is("Updated"));
         assertThat(searchUrlResponse.getUsername(),is("new username"));
         assertThat(searchUrlResponse.getPassword(),is("@Femifemo^41"));
     }
@@ -319,11 +318,12 @@ class PasswordServiceTest {
         searchUrlRequest.setEmail("lotachukwu@gmail.com");
 
         SearchUrlResponse searchUrlResponse = passwordService.searchUrl(searchUrlRequest);
-        assertThat(response.getMsg(),is("updated"));
+        assertThat(response.getMsg(),is("Updated"));
         assertThat(searchUrlResponse.getUsername(),is("femz_man"));
         assertThat(searchUrlResponse.getPassword(),is("new password"));
     }
 
+    @DisplayName("If user search a url and email that does not exist in the database, throw exception")
     @Test
     public void testThatUrlAndEmailThatDoesntExistThrows_Exception(){
         //given
@@ -358,7 +358,7 @@ class PasswordServiceTest {
         searchUrlRequest.setUrl("www.juno.com");
         searchUrlRequest.setEmail("mmesoma@gmail.com");
 
-        assertThrows(UrlNotFoundException.class, ()->passwordService.searchUrl(searchUrlRequest));
+        assertThrows(UrlNotFoundException.class, ()-> passwordService.searchUrl(searchUrlRequest));
     }
 
 

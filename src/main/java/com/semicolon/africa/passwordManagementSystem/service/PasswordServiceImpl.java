@@ -21,7 +21,7 @@ public class PasswordServiceImpl implements PasswordService{
     @Override
     public CreateUserResponse createUser(CreateUserRequest userRequest) {
         System.out.println(userRequest.getEmail());
-        if(userAlreadyExist(userRequest.getEmail())) throw new UserAlreadyExistsException("user already exist, create another account");
+        if(userAlreadyExist(userRequest.getEmail())) throw new UserAlreadyExistsException("user with email" + userRequest.getEmail() + " already exist, create another account");
         if(!passwordIsValid(userRequest.getPassword())) throw new InvalidPasswordException("invalid password");
 
         User newUser = new User();
@@ -79,14 +79,14 @@ public class PasswordServiceImpl implements PasswordService{
                 throw new CannotAddPasswordException("oops! Cannot add password,please log in");
             }
 
-            PasswordToSave passwordToSave = new PasswordToSave();
-            passwordToSave.setId(getListOfSavedPassword(saveRequest.getEmail()).size() + 1);
-            passwordToSave.setPassword(saveRequest.getPassword());
-            passwordToSave.setName(saveRequest.getName());
-            passwordToSave.setUsername(saveRequest.getUsername());
-            passwordToSave.setUrl(saveRequest.getUrl());
+            PasswordToSave passwordToBeSaved = new PasswordToSave();
+            passwordToBeSaved.setId(getListOfSavedPassword(saveRequest.getEmail()).size() + 1);
+            passwordToBeSaved.setPassword(saveRequest.getPassword());
+            passwordToBeSaved.setName(saveRequest.getName());
+            passwordToBeSaved.setUsername(saveRequest.getUsername());
+            passwordToBeSaved.setUrl(saveRequest.getUrl());
 
-            newUser.getRegisteredPassword().add(passwordToSave);
+            newUser.getRegisteredPassword().add(passwordToBeSaved);
 
             passwordManagerRepo.save(newUser);
             AddPasswordResponse response = new AddPasswordResponse();
@@ -175,7 +175,7 @@ public class PasswordServiceImpl implements PasswordService{
 
               if(updateRequest.getUsername() != null) password.setUsername(updateRequest.getUsername());
               if(updateRequest.getPassword() != null) password.setPassword(updateRequest.getPassword());
-               response.setMsg("updated");
+               response.setMsg("Updated");
                response.setUsername(password.getUsername());
                response.setUrl(password.getUrl());
                response.setName(password.getName());
