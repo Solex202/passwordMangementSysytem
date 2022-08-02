@@ -50,6 +50,9 @@ public class PasswordServiceImpl implements PasswordService{
                + "(?=.*[@#$%^&+=])"
                + "(?=\\S+$).{8,20}$";
 
+
+
+
        return password.matches(isValid);
     }
 
@@ -187,50 +190,6 @@ public class PasswordServiceImpl implements PasswordService{
 
         return response;
     }
-    //    @Test
-//    void testThatUserCanEditPassword() {
-//        //given
-//        AddUserRequest request = AddUserRequest
-//                .builder()
-//                .firstName("adeola")
-//                .lastName("oladeji")
-//                .email("adeolaoladeji@gmail.com")
-//                .password("deedeji123")
-//                .confirmPassword("deedeji123")
-//                .gender(Gender.FEMALE)
-//                .build();
-//        //when
-//        userService.createUser(request);
-//
-//        //given
-//        AddUserRequest request2 = AddUserRequest
-//                .builder()
-//                .firstName("mercy")
-//                .lastName("chioma")
-//                .email("mercy@gmail.com")
-//                .password("mercySaidNo")
-//                .confirmPassword("mercySaidNo")
-//                .gender(Gender.FEMALE)
-//                .build();
-//
-//        userService.createUser(request2);
-//
-//        assertThat(userService.getAllUser().size(), is(2));
-//
-//        UpdateProfileRequest updateRequest = new UpdateProfileRequest();
-//        updateRequest.setPassword("mercy1234");
-//
-//        String response = userService.updateUser(request2.getEmail(), updateRequest);
-//        System.out.println(userService.getAllUser());
-//
-//        FindUserResponse response2 = userService.findUser(request2.getEmail());
-//
-//        //assert
-//        assertThat(response, is("profile updated"));
-//        assertThat(response2.getFirstName(),is("mercy"));
-//        assertThat(response2.getLastName(),is("chioma"));
-//        assertThat(response2.getPassword(),is("mercy1234"));
-//        assertThat(response2.getEmail(),is("mercy@gmail.com"));
-//    }
+
 
 }
